@@ -3,29 +3,29 @@ pocket-ds18b20-fw.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000800  00000000  00000000  00000054  2**1
+  0 .text         000006dc  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  00000854  2**0
+  1 .data         00000000  00800060  00800060  00000730  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .comment      00000030  00000000  00000000  00000854  2**0
+  2 .comment      00000030  00000000  00000000  00000730  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000884  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000760  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 000000d8  00000000  00000000  000008c0  2**0
+  4 .debug_aranges 000000d8  00000000  00000000  0000079c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00001b82  00000000  00000000  00000998  2**0
+  5 .debug_info   000022b8  00000000  00000000  00000874  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000894  00000000  00000000  0000251a  2**0
+  6 .debug_abbrev 00000a53  00000000  00000000  00002b2c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000a37  00000000  00000000  00002dae  2**0
+  7 .debug_line   00000a98  00000000  00000000  0000357f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000344  00000000  00000000  000037e8  2**2
+  8 .debug_frame  000002f4  00000000  00000000  00004018  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000004b2  00000000  00000000  00003b2c  2**0
+  9 .debug_str    000004b9  00000000  00000000  0000430c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00001749  00000000  00000000  00003fde  2**0
+ 10 .debug_loc    0000230f  00000000  00000000  000047c5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 000000c0  00000000  00000000  00005727  2**0
+ 11 .debug_ranges 000001d8  00000000  00000000  00006ad4  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -54,1402 +54,1195 @@ Disassembly of section .text:
   24:	1f be       	out	0x3f, r1	; 63
   26:	cf ed       	ldi	r28, 0xDF	; 223
   28:	cd bf       	out	0x3d, r28	; 61
-  2a:	44 d2       	rcall	.+1160   	; 0x4b4 <main>
-  2c:	e7 c3       	rjmp	.+1998   	; 0x7fc <_exit>
+  2a:	c2 d1       	rcall	.+900    	; 0x3b0 <main>
+  2c:	55 c3       	rjmp	.+1706   	; 0x6d8 <_exit>
 
 0000002e <__bad_interrupt>:
   2e:	e8 cf       	rjmp	.-48     	; 0x0 <__vectors>
 
-00000030 <ds18b20crc8>:
+00000030 <ds18b20convert>:
 	//Poor DS18B20 feels better then...
 	*port |= mask;
 	*direction |= mask;
 
 	return DS18B20_ERROR_OK;
 }
-  30:	dc 01       	movw	r26, r24
-  32:	80 e0       	ldi	r24, 0x00	; 0
-  34:	40 e0       	ldi	r20, 0x00	; 0
-  36:	12 c0       	rjmp	.+36     	; 0x5c <__SREG__+0x1d>
-  38:	fd 01       	movw	r30, r26
-  3a:	e4 0f       	add	r30, r20
-  3c:	f1 1d       	adc	r31, r1
-  3e:	20 81       	ld	r18, Z
-  40:	90 e0       	ldi	r25, 0x00	; 0
-  42:	09 c0       	rjmp	.+18     	; 0x56 <__SREG__+0x17>
-  44:	38 2f       	mov	r19, r24
-  46:	32 27       	eor	r19, r18
-  48:	86 95       	lsr	r24
-  4a:	30 ff       	sbrs	r19, 0
-  4c:	02 c0       	rjmp	.+4      	; 0x52 <__SREG__+0x13>
-  4e:	3c e8       	ldi	r19, 0x8C	; 140
-  50:	83 27       	eor	r24, r19
-  52:	26 95       	lsr	r18
-  54:	9f 5f       	subi	r25, 0xFF	; 255
-  56:	98 30       	cpi	r25, 0x08	; 8
-  58:	a8 f3       	brcs	.-22     	; 0x44 <__SREG__+0x5>
-  5a:	4f 5f       	subi	r20, 0xFF	; 255
-  5c:	46 17       	cp	r20, r22
-  5e:	60 f3       	brcs	.-40     	; 0x38 <ds18b20crc8+0x8>
-  60:	08 95       	ret
+  30:	cf 92       	push	r12
+  32:	df 92       	push	r13
+  34:	ef 92       	push	r14
+  36:	ff 92       	push	r15
+  38:	0f 93       	push	r16
+  3a:	1f 93       	push	r17
+  3c:	cf 93       	push	r28
+  3e:	df 93       	push	r29
+  40:	ec 01       	movw	r28, r24
+  42:	7b 01       	movw	r14, r22
+  44:	6a 01       	movw	r12, r20
+  46:	12 2f       	mov	r17, r18
+  48:	3c d2       	rcall	.+1144   	; 0x4c2 <onewireInit>
+  4a:	81 30       	cpi	r24, 0x01	; 1
+  4c:	69 f0       	breq	.+26     	; 0x68 <__SREG__+0x29>
+  4e:	0c ec       	ldi	r16, 0xCC	; 204
+  50:	21 2f       	mov	r18, r17
+  52:	a6 01       	movw	r20, r12
+  54:	b7 01       	movw	r22, r14
+  56:	ce 01       	movw	r24, r28
+  58:	65 d2       	rcall	.+1226   	; 0x524 <onewireWrite>
+  5a:	04 e4       	ldi	r16, 0x44	; 68
+  5c:	21 2f       	mov	r18, r17
+  5e:	a6 01       	movw	r20, r12
+  60:	b7 01       	movw	r22, r14
+  62:	ce 01       	movw	r24, r28
+  64:	5f d2       	rcall	.+1214   	; 0x524 <onewireWrite>
+  66:	80 e0       	ldi	r24, 0x00	; 0
+  68:	df 91       	pop	r29
+  6a:	cf 91       	pop	r28
+  6c:	1f 91       	pop	r17
+  6e:	0f 91       	pop	r16
+  70:	ff 90       	pop	r15
+  72:	ef 90       	pop	r14
+  74:	df 90       	pop	r13
+  76:	cf 90       	pop	r12
+  78:	08 95       	ret
 
-00000062 <ds18b20convert>:
-  62:	cf 92       	push	r12
-  64:	df 92       	push	r13
-  66:	ef 92       	push	r14
-  68:	ff 92       	push	r15
-  6a:	0f 93       	push	r16
-  6c:	1f 93       	push	r17
-  6e:	cf 93       	push	r28
-  70:	df 93       	push	r29
-  72:	ec 01       	movw	r28, r24
-  74:	7b 01       	movw	r14, r22
-  76:	6a 01       	movw	r12, r20
-  78:	12 2f       	mov	r17, r18
-  7a:	c7 d2       	rcall	.+1422   	; 0x60a <onewireInit>
-  7c:	81 30       	cpi	r24, 0x01	; 1
-  7e:	69 f0       	breq	.+26     	; 0x9a <__DATA_REGION_LENGTH__+0x1a>
-  80:	0c ec       	ldi	r16, 0xCC	; 204
-  82:	21 2f       	mov	r18, r17
-  84:	a6 01       	movw	r20, r12
-  86:	b7 01       	movw	r22, r14
-  88:	ce 01       	movw	r24, r28
-  8a:	1d d3       	rcall	.+1594   	; 0x6c6 <onewireWrite>
-  8c:	04 e4       	ldi	r16, 0x44	; 68
-  8e:	21 2f       	mov	r18, r17
-  90:	a6 01       	movw	r20, r12
-  92:	b7 01       	movw	r22, r14
-  94:	ce 01       	movw	r24, r28
-  96:	17 d3       	rcall	.+1582   	; 0x6c6 <onewireWrite>
-  98:	80 e0       	ldi	r24, 0x00	; 0
-  9a:	df 91       	pop	r29
-  9c:	cf 91       	pop	r28
-  9e:	1f 91       	pop	r17
-  a0:	0f 91       	pop	r16
-  a2:	ff 90       	pop	r15
-  a4:	ef 90       	pop	r14
-  a6:	df 90       	pop	r13
-  a8:	cf 90       	pop	r12
-  aa:	08 95       	ret
+0000007a <ds18b20rsp>:
+  7a:	5f 92       	push	r5
+  7c:	6f 92       	push	r6
+  7e:	7f 92       	push	r7
+  80:	8f 92       	push	r8
+  82:	9f 92       	push	r9
+  84:	af 92       	push	r10
+  86:	bf 92       	push	r11
+  88:	cf 92       	push	r12
+  8a:	df 92       	push	r13
+  8c:	ef 92       	push	r14
+  8e:	ff 92       	push	r15
+  90:	0f 93       	push	r16
+  92:	1f 93       	push	r17
+  94:	cf 93       	push	r28
+  96:	df 93       	push	r29
+  98:	6c 01       	movw	r12, r24
+  9a:	5b 01       	movw	r10, r22
+  9c:	4a 01       	movw	r8, r20
+  9e:	52 2e       	mov	r5, r18
+  a0:	10 d2       	rcall	.+1056   	; 0x4c2 <onewireInit>
+  a2:	81 30       	cpi	r24, 0x01	; 1
+  a4:	61 f1       	breq	.+88     	; 0xfe <__stack+0x1f>
+  a6:	0c ec       	ldi	r16, 0xCC	; 204
+  a8:	25 2d       	mov	r18, r5
+  aa:	a4 01       	movw	r20, r8
+  ac:	b5 01       	movw	r22, r10
+  ae:	c6 01       	movw	r24, r12
+  b0:	39 d2       	rcall	.+1138   	; 0x524 <onewireWrite>
+  b2:	0e eb       	ldi	r16, 0xBE	; 190
+  b4:	25 2d       	mov	r18, r5
+  b6:	a4 01       	movw	r20, r8
+  b8:	b5 01       	movw	r22, r10
+  ba:	c6 01       	movw	r24, r12
+  bc:	33 d2       	rcall	.+1126   	; 0x524 <onewireWrite>
+  be:	37 01       	movw	r6, r14
+  c0:	87 01       	movw	r16, r14
+  c2:	07 5f       	subi	r16, 0xF7	; 247
+  c4:	1f 4f       	sbci	r17, 0xFF	; 255
+  c6:	e7 01       	movw	r28, r14
+  c8:	25 2d       	mov	r18, r5
+  ca:	a4 01       	movw	r20, r8
+  cc:	b5 01       	movw	r22, r10
+  ce:	c6 01       	movw	r24, r12
+  d0:	60 d2       	rcall	.+1216   	; 0x592 <onewireRead>
+  d2:	89 93       	st	Y+, r24
+  d4:	c0 17       	cp	r28, r16
+  d6:	d1 07       	cpc	r29, r17
+  d8:	b9 f7       	brne	.-18     	; 0xc8 <__DATA_REGION_LENGTH__+0x48>
+  da:	f7 01       	movw	r30, r14
+  dc:	90 81       	ld	r25, Z
+  de:	81 81       	ldd	r24, Z+1	; 0x01
+  e0:	89 2b       	or	r24, r25
+  e2:	92 81       	ldd	r25, Z+2	; 0x02
+  e4:	89 2b       	or	r24, r25
+  e6:	93 81       	ldd	r25, Z+3	; 0x03
+  e8:	89 2b       	or	r24, r25
+  ea:	94 81       	ldd	r25, Z+4	; 0x04
+  ec:	89 2b       	or	r24, r25
+  ee:	95 81       	ldd	r25, Z+5	; 0x05
+  f0:	89 2b       	or	r24, r25
+  f2:	96 81       	ldd	r25, Z+6	; 0x06
+  f4:	89 2b       	or	r24, r25
+  f6:	97 81       	ldd	r25, Z+7	; 0x07
+  f8:	89 2b       	or	r24, r25
+  fa:	89 f4       	brne	.+34     	; 0x11e <__stack+0x3f>
+  fc:	83 e0       	ldi	r24, 0x03	; 3
+  fe:	df 91       	pop	r29
+ 100:	cf 91       	pop	r28
+ 102:	1f 91       	pop	r17
+ 104:	0f 91       	pop	r16
+ 106:	ff 90       	pop	r15
+ 108:	ef 90       	pop	r14
+ 10a:	df 90       	pop	r13
+ 10c:	cf 90       	pop	r12
+ 10e:	bf 90       	pop	r11
+ 110:	af 90       	pop	r10
+ 112:	9f 90       	pop	r9
+ 114:	8f 90       	pop	r8
+ 116:	7f 90       	pop	r7
+ 118:	6f 90       	pop	r6
+ 11a:	5f 90       	pop	r5
+ 11c:	08 95       	ret
+ 11e:	b7 01       	movw	r22, r14
+ 120:	68 5f       	subi	r22, 0xF8	; 248
+ 122:	7f 4f       	sbci	r23, 0xFF	; 255
+ 124:	90 e0       	ldi	r25, 0x00	; 0
+ 126:	4c e8       	ldi	r20, 0x8C	; 140
+ 128:	f3 01       	movw	r30, r6
+ 12a:	21 91       	ld	r18, Z+
+ 12c:	3f 01       	movw	r6, r30
+ 12e:	88 e0       	ldi	r24, 0x08	; 8
+ 130:	39 2f       	mov	r19, r25
+ 132:	32 27       	eor	r19, r18
+ 134:	96 95       	lsr	r25
+ 136:	30 fd       	sbrc	r19, 0
+ 138:	94 27       	eor	r25, r20
+ 13a:	26 95       	lsr	r18
+ 13c:	81 50       	subi	r24, 0x01	; 1
+ 13e:	c1 f7       	brne	.-16     	; 0x130 <__stack+0x51>
+ 140:	66 16       	cp	r6, r22
+ 142:	77 06       	cpc	r7, r23
+ 144:	89 f7       	brne	.-30     	; 0x128 <__stack+0x49>
+ 146:	f7 01       	movw	r30, r14
+ 148:	20 85       	ldd	r18, Z+8	; 0x08
+ 14a:	29 17       	cp	r18, r25
+ 14c:	c1 f2       	breq	.-80     	; 0xfe <__stack+0x1f>
+ 14e:	82 e0       	ldi	r24, 0x02	; 2
+ 150:	d6 cf       	rjmp	.-84     	; 0xfe <__stack+0x1f>
 
-000000ac <ds18b20rsp>:
-  ac:	8f 92       	push	r8
-  ae:	9f 92       	push	r9
-  b0:	af 92       	push	r10
-  b2:	bf 92       	push	r11
-  b4:	cf 92       	push	r12
-  b6:	df 92       	push	r13
-  b8:	ef 92       	push	r14
-  ba:	ff 92       	push	r15
-  bc:	0f 93       	push	r16
-  be:	1f 93       	push	r17
-  c0:	cf 93       	push	r28
-  c2:	df 93       	push	r29
-  c4:	6c 01       	movw	r12, r24
-  c6:	5b 01       	movw	r10, r22
-  c8:	4a 01       	movw	r8, r20
-  ca:	d2 2f       	mov	r29, r18
-  cc:	9e d2       	rcall	.+1340   	; 0x60a <onewireInit>
-  ce:	81 30       	cpi	r24, 0x01	; 1
-  d0:	c1 f1       	breq	.+112    	; 0x142 <__stack+0x63>
-  d2:	0c ec       	ldi	r16, 0xCC	; 204
-  d4:	2d 2f       	mov	r18, r29
-  d6:	a4 01       	movw	r20, r8
-  d8:	b5 01       	movw	r22, r10
-  da:	c6 01       	movw	r24, r12
-  dc:	f4 d2       	rcall	.+1512   	; 0x6c6 <onewireWrite>
-  de:	0e eb       	ldi	r16, 0xBE	; 190
-  e0:	2d 2f       	mov	r18, r29
-  e2:	a4 01       	movw	r20, r8
-  e4:	b5 01       	movw	r22, r10
-  e6:	c6 01       	movw	r24, r12
-  e8:	ee d2       	rcall	.+1500   	; 0x6c6 <onewireWrite>
-  ea:	c0 e0       	ldi	r28, 0x00	; 0
-  ec:	0b c0       	rjmp	.+22     	; 0x104 <__stack+0x25>
-  ee:	87 01       	movw	r16, r14
-  f0:	0c 0f       	add	r16, r28
-  f2:	11 1d       	adc	r17, r1
-  f4:	2d 2f       	mov	r18, r29
-  f6:	a4 01       	movw	r20, r8
-  f8:	b5 01       	movw	r22, r10
-  fa:	c6 01       	movw	r24, r12
-  fc:	2e d3       	rcall	.+1628   	; 0x75a <onewireRead>
-  fe:	f8 01       	movw	r30, r16
- 100:	80 83       	st	Z, r24
- 102:	cf 5f       	subi	r28, 0xFF	; 255
- 104:	c9 30       	cpi	r28, 0x09	; 9
- 106:	98 f3       	brcs	.-26     	; 0xee <__stack+0xf>
- 108:	f7 01       	movw	r30, r14
- 10a:	70 81       	ld	r23, Z
- 10c:	81 81       	ldd	r24, Z+1	; 0x01
- 10e:	62 81       	ldd	r22, Z+2	; 0x02
- 110:	53 81       	ldd	r21, Z+3	; 0x03
- 112:	44 81       	ldd	r20, Z+4	; 0x04
- 114:	35 81       	ldd	r19, Z+5	; 0x05
- 116:	26 81       	ldd	r18, Z+6	; 0x06
- 118:	97 81       	ldd	r25, Z+7	; 0x07
- 11a:	87 2b       	or	r24, r23
- 11c:	86 2b       	or	r24, r22
- 11e:	85 2b       	or	r24, r21
- 120:	84 2b       	or	r24, r20
- 122:	83 2b       	or	r24, r19
- 124:	82 2b       	or	r24, r18
- 126:	89 2b       	or	r24, r25
- 128:	49 f0       	breq	.+18     	; 0x13c <__stack+0x5d>
- 12a:	68 e0       	ldi	r22, 0x08	; 8
- 12c:	c7 01       	movw	r24, r14
- 12e:	80 df       	rcall	.-256    	; 0x30 <ds18b20crc8>
- 130:	f7 01       	movw	r30, r14
- 132:	90 85       	ldd	r25, Z+8	; 0x08
- 134:	89 17       	cp	r24, r25
- 136:	21 f0       	breq	.+8      	; 0x140 <__stack+0x61>
- 138:	82 e0       	ldi	r24, 0x02	; 2
- 13a:	03 c0       	rjmp	.+6      	; 0x142 <__stack+0x63>
- 13c:	83 e0       	ldi	r24, 0x03	; 3
- 13e:	01 c0       	rjmp	.+2      	; 0x142 <__stack+0x63>
- 140:	80 e0       	ldi	r24, 0x00	; 0
- 142:	df 91       	pop	r29
- 144:	cf 91       	pop	r28
- 146:	1f 91       	pop	r17
- 148:	0f 91       	pop	r16
- 14a:	ff 90       	pop	r15
- 14c:	ef 90       	pop	r14
- 14e:	df 90       	pop	r13
- 150:	cf 90       	pop	r12
- 152:	bf 90       	pop	r11
- 154:	af 90       	pop	r10
- 156:	9f 90       	pop	r9
- 158:	8f 90       	pop	r8
- 15a:	08 95       	ret
+00000152 <ds18b20wsp>:
+ 152:	6f 92       	push	r6
+ 154:	7f 92       	push	r7
+ 156:	8f 92       	push	r8
+ 158:	9f 92       	push	r9
+ 15a:	af 92       	push	r10
+ 15c:	cf 92       	push	r12
+ 15e:	ef 92       	push	r14
+ 160:	0f 93       	push	r16
+ 162:	1f 93       	push	r17
+ 164:	cf 93       	push	r28
+ 166:	df 93       	push	r29
+ 168:	ec 01       	movw	r28, r24
+ 16a:	4b 01       	movw	r8, r22
+ 16c:	3a 01       	movw	r6, r20
+ 16e:	12 2f       	mov	r17, r18
+ 170:	a8 d1       	rcall	.+848    	; 0x4c2 <onewireInit>
+ 172:	81 30       	cpi	r24, 0x01	; 1
+ 174:	f9 f0       	breq	.+62     	; 0x1b4 <ds18b20wsp+0x62>
+ 176:	0c ec       	ldi	r16, 0xCC	; 204
+ 178:	21 2f       	mov	r18, r17
+ 17a:	a3 01       	movw	r20, r6
+ 17c:	b4 01       	movw	r22, r8
+ 17e:	ce 01       	movw	r24, r28
+ 180:	d1 d1       	rcall	.+930    	; 0x524 <onewireWrite>
+ 182:	0e e4       	ldi	r16, 0x4E	; 78
+ 184:	21 2f       	mov	r18, r17
+ 186:	a3 01       	movw	r20, r6
+ 188:	b4 01       	movw	r22, r8
+ 18a:	ce 01       	movw	r24, r28
+ 18c:	cb d1       	rcall	.+918    	; 0x524 <onewireWrite>
+ 18e:	0e 2d       	mov	r16, r14
+ 190:	21 2f       	mov	r18, r17
+ 192:	a3 01       	movw	r20, r6
+ 194:	b4 01       	movw	r22, r8
+ 196:	ce 01       	movw	r24, r28
+ 198:	c5 d1       	rcall	.+906    	; 0x524 <onewireWrite>
+ 19a:	0c 2d       	mov	r16, r12
+ 19c:	21 2f       	mov	r18, r17
+ 19e:	a3 01       	movw	r20, r6
+ 1a0:	b4 01       	movw	r22, r8
+ 1a2:	ce 01       	movw	r24, r28
+ 1a4:	bf d1       	rcall	.+894    	; 0x524 <onewireWrite>
+ 1a6:	0a 2d       	mov	r16, r10
+ 1a8:	21 2f       	mov	r18, r17
+ 1aa:	a3 01       	movw	r20, r6
+ 1ac:	b4 01       	movw	r22, r8
+ 1ae:	ce 01       	movw	r24, r28
+ 1b0:	b9 d1       	rcall	.+882    	; 0x524 <onewireWrite>
+ 1b2:	80 e0       	ldi	r24, 0x00	; 0
+ 1b4:	df 91       	pop	r29
+ 1b6:	cf 91       	pop	r28
+ 1b8:	1f 91       	pop	r17
+ 1ba:	0f 91       	pop	r16
+ 1bc:	ef 90       	pop	r14
+ 1be:	cf 90       	pop	r12
+ 1c0:	af 90       	pop	r10
+ 1c2:	9f 90       	pop	r9
+ 1c4:	8f 90       	pop	r8
+ 1c6:	7f 90       	pop	r7
+ 1c8:	6f 90       	pop	r6
+ 1ca:	08 95       	ret
 
-0000015c <ds18b20wsp>:
- 15c:	6f 92       	push	r6
- 15e:	7f 92       	push	r7
- 160:	8f 92       	push	r8
- 162:	9f 92       	push	r9
- 164:	af 92       	push	r10
- 166:	cf 92       	push	r12
- 168:	ef 92       	push	r14
- 16a:	0f 93       	push	r16
- 16c:	1f 93       	push	r17
- 16e:	cf 93       	push	r28
- 170:	df 93       	push	r29
- 172:	ec 01       	movw	r28, r24
- 174:	4b 01       	movw	r8, r22
- 176:	3a 01       	movw	r6, r20
- 178:	12 2f       	mov	r17, r18
- 17a:	47 d2       	rcall	.+1166   	; 0x60a <onewireInit>
- 17c:	81 30       	cpi	r24, 0x01	; 1
- 17e:	f9 f0       	breq	.+62     	; 0x1be <ds18b20wsp+0x62>
- 180:	0c ec       	ldi	r16, 0xCC	; 204
- 182:	21 2f       	mov	r18, r17
- 184:	a3 01       	movw	r20, r6
- 186:	b4 01       	movw	r22, r8
- 188:	ce 01       	movw	r24, r28
- 18a:	9d d2       	rcall	.+1338   	; 0x6c6 <onewireWrite>
- 18c:	0e e4       	ldi	r16, 0x4E	; 78
- 18e:	21 2f       	mov	r18, r17
- 190:	a3 01       	movw	r20, r6
- 192:	b4 01       	movw	r22, r8
- 194:	ce 01       	movw	r24, r28
- 196:	97 d2       	rcall	.+1326   	; 0x6c6 <onewireWrite>
- 198:	0e 2d       	mov	r16, r14
- 19a:	21 2f       	mov	r18, r17
- 19c:	a3 01       	movw	r20, r6
- 19e:	b4 01       	movw	r22, r8
- 1a0:	ce 01       	movw	r24, r28
- 1a2:	91 d2       	rcall	.+1314   	; 0x6c6 <onewireWrite>
- 1a4:	0c 2d       	mov	r16, r12
- 1a6:	21 2f       	mov	r18, r17
- 1a8:	a3 01       	movw	r20, r6
- 1aa:	b4 01       	movw	r22, r8
- 1ac:	ce 01       	movw	r24, r28
- 1ae:	8b d2       	rcall	.+1302   	; 0x6c6 <onewireWrite>
- 1b0:	0a 2d       	mov	r16, r10
- 1b2:	21 2f       	mov	r18, r17
- 1b4:	a3 01       	movw	r20, r6
- 1b6:	b4 01       	movw	r22, r8
- 1b8:	ce 01       	movw	r24, r28
- 1ba:	85 d2       	rcall	.+1290   	; 0x6c6 <onewireWrite>
- 1bc:	80 e0       	ldi	r24, 0x00	; 0
- 1be:	df 91       	pop	r29
- 1c0:	cf 91       	pop	r28
- 1c2:	1f 91       	pop	r17
- 1c4:	0f 91       	pop	r16
- 1c6:	ef 90       	pop	r14
- 1c8:	cf 90       	pop	r12
- 1ca:	af 90       	pop	r10
- 1cc:	9f 90       	pop	r9
- 1ce:	8f 90       	pop	r8
- 1d0:	7f 90       	pop	r7
- 1d2:	6f 90       	pop	r6
- 1d4:	08 95       	ret
-
-000001d6 <ds18b20read>:
+000001cc <ds18b20read>:
 
 //! Read temperature
 uint8_t ds18b20read( volatile uint8_t *port, volatile uint8_t *direction, volatile uint8_t *portin, uint8_t mask, uint8_t *rom, int16_t *temperature )
 {
- 1d6:	cf 92       	push	r12
- 1d8:	df 92       	push	r13
- 1da:	ef 92       	push	r14
- 1dc:	ff 92       	push	r15
- 1de:	0f 93       	push	r16
- 1e0:	1f 93       	push	r17
- 1e2:	cf 93       	push	r28
- 1e4:	df 93       	push	r29
- 1e6:	cd b7       	in	r28, 0x3d	; 61
- 1e8:	dd 27       	eor	r29, r29
- 1ea:	c9 50       	subi	r28, 0x09	; 9
- 1ec:	cd bf       	out	0x3d, r28	; 61
- 1ee:	67 01       	movw	r12, r14
+ 1cc:	cf 92       	push	r12
+ 1ce:	df 92       	push	r13
+ 1d0:	ef 92       	push	r14
+ 1d2:	ff 92       	push	r15
+ 1d4:	0f 93       	push	r16
+ 1d6:	1f 93       	push	r17
+ 1d8:	cf 93       	push	r28
+ 1da:	df 93       	push	r29
+ 1dc:	cd b7       	in	r28, 0x3d	; 61
+ 1de:	dd 27       	eor	r29, r29
+ 1e0:	c9 50       	subi	r28, 0x09	; 9
+ 1e2:	cd bf       	out	0x3d, r28	; 61
+ 1e4:	67 01       	movw	r12, r14
 
 	uint8_t sp[9];
 	uint8_t ec = 0;
 
 	//Communication, pull-up, CRC checks happen here
 	ec = ds18b20rsp( port, direction, portin, mask, rom, sp );
- 1f0:	fe 01       	movw	r30, r28
- 1f2:	31 96       	adiw	r30, 0x01	; 1
- 1f4:	7f 01       	movw	r14, r30
- 1f6:	5a df       	rcall	.-332    	; 0xac <ds18b20rsp>
+ 1e6:	fe 01       	movw	r30, r28
+ 1e8:	31 96       	adiw	r30, 0x01	; 1
+ 1ea:	7f 01       	movw	r14, r30
+ 1ec:	46 df       	rcall	.-372    	; 0x7a <ds18b20rsp>
 
 	if ( ec != DS18B20_ERROR_OK )
- 1f8:	88 23       	and	r24, r24
- 1fa:	21 f0       	breq	.+8      	; 0x204 <ds18b20read+0x2e>
-	{
+ 1ee:	81 11       	cpse	r24, r1
+ 1f0:	16 c0       	rjmp	.+44     	; 0x21e <ds18b20read+0x52>
 		*temperature = 0;
- 1fc:	f6 01       	movw	r30, r12
- 1fe:	11 82       	std	Z+1, r1	; 0x01
- 200:	10 82       	st	Z, r1
 		return ec;
- 202:	0b c0       	rjmp	.+22     	; 0x21a <ds18b20read+0x44>
 	}
 
 	//Get temperature from received data
 	*temperature = (int16_t)( sp[1] << 8 ) + sp[0];
- 204:	8a 81       	ldd	r24, Y+2	; 0x02
- 206:	90 e0       	ldi	r25, 0x00	; 0
- 208:	98 2f       	mov	r25, r24
- 20a:	88 27       	eor	r24, r24
- 20c:	29 81       	ldd	r18, Y+1	; 0x01
- 20e:	82 0f       	add	r24, r18
- 210:	91 1d       	adc	r25, r1
- 212:	f6 01       	movw	r30, r12
- 214:	91 83       	std	Z+1, r25	; 0x01
- 216:	80 83       	st	Z, r24
+ 1f2:	8a 81       	ldd	r24, Y+2	; 0x02
+ 1f4:	90 e0       	ldi	r25, 0x00	; 0
+ 1f6:	98 2f       	mov	r25, r24
+ 1f8:	88 27       	eor	r24, r24
+ 1fa:	29 81       	ldd	r18, Y+1	; 0x01
+ 1fc:	82 0f       	add	r24, r18
+ 1fe:	91 1d       	adc	r25, r1
+ 200:	f6 01       	movw	r30, r12
+ 202:	91 83       	std	Z+1, r25	; 0x01
+ 204:	80 83       	st	Z, r24
 
 	return DS18B20_ERROR_OK;
- 218:	80 e0       	ldi	r24, 0x00	; 0
- 21a:	c7 5f       	subi	r28, 0xF7	; 247
- 21c:	cd bf       	out	0x3d, r28	; 61
- 21e:	df 91       	pop	r29
- 220:	cf 91       	pop	r28
- 222:	1f 91       	pop	r17
- 224:	0f 91       	pop	r16
- 226:	ff 90       	pop	r15
- 228:	ef 90       	pop	r14
- 22a:	df 90       	pop	r13
- 22c:	cf 90       	pop	r12
- 22e:	08 95       	ret
+ 206:	80 e0       	ldi	r24, 0x00	; 0
+ 208:	c7 5f       	subi	r28, 0xF7	; 247
+ 20a:	cd bf       	out	0x3d, r28	; 61
+ 20c:	df 91       	pop	r29
+ 20e:	cf 91       	pop	r28
+ 210:	1f 91       	pop	r17
+ 212:	0f 91       	pop	r16
+ 214:	ff 90       	pop	r15
+ 216:	ef 90       	pop	r14
+ 218:	df 90       	pop	r13
+ 21a:	cf 90       	pop	r12
+ 21c:	08 95       	ret
+	//Communication, pull-up, CRC checks happen here
+	ec = ds18b20rsp( port, direction, portin, mask, rom, sp );
 
-00000230 <set>:
-#define CS 3
-#define MOSI 2
-#define SCK 1
+	if ( ec != DS18B20_ERROR_OK )
+	{
+		*temperature = 0;
+ 21e:	f6 01       	movw	r30, r12
+ 220:	11 82       	std	Z+1, r1	; 0x01
+ 222:	10 82       	st	Z, r1
+		return ec;
+ 224:	f1 cf       	rjmp	.-30     	; 0x208 <ds18b20read+0x3c>
 
-void set(uint8_t pin, uint8_t val) {
-	if (val == 0) {
- 230:	61 11       	cpse	r22, r1
- 232:	0e c0       	rjmp	.+28     	; 0x250 <set+0x20>
-		PORTA &= ~(1 << pin);
- 234:	4b b3       	in	r20, 0x1b	; 27
- 236:	21 e0       	ldi	r18, 0x01	; 1
- 238:	30 e0       	ldi	r19, 0x00	; 0
- 23a:	b9 01       	movw	r22, r18
- 23c:	02 c0       	rjmp	.+4      	; 0x242 <set+0x12>
- 23e:	66 0f       	add	r22, r22
- 240:	77 1f       	adc	r23, r23
- 242:	8a 95       	dec	r24
- 244:	e2 f7       	brpl	.-8      	; 0x23e <set+0xe>
- 246:	cb 01       	movw	r24, r22
- 248:	80 95       	com	r24
- 24a:	84 23       	and	r24, r20
- 24c:	8b bb       	out	0x1b, r24	; 27
- 24e:	08 95       	ret
-	}
-	else {
-		PORTA |= (1 << pin);
- 250:	4b b3       	in	r20, 0x1b	; 27
- 252:	21 e0       	ldi	r18, 0x01	; 1
- 254:	30 e0       	ldi	r19, 0x00	; 0
- 256:	b9 01       	movw	r22, r18
- 258:	02 c0       	rjmp	.+4      	; 0x25e <set+0x2e>
- 25a:	66 0f       	add	r22, r22
- 25c:	77 1f       	adc	r23, r23
- 25e:	8a 95       	dec	r24
- 260:	e2 f7       	brpl	.-8      	; 0x25a <set+0x2a>
- 262:	cb 01       	movw	r24, r22
- 264:	84 2b       	or	r24, r20
- 266:	8b bb       	out	0x1b, r24	; 27
- 268:	08 95       	ret
-
-0000026a <shiftOut>:
-	}
-}
-
-void shiftOut(uint8_t data) {
- 26a:	cf 93       	push	r28
- 26c:	df 93       	push	r29
- 26e:	d8 2f       	mov	r29, r24
-	for(uint8_t i = 0; i < 8; i++) {
- 270:	c0 e0       	ldi	r28, 0x00	; 0
- 272:	1c c0       	rjmp	.+56     	; 0x2ac <shiftOut+0x42>
-		int bit = data & (1 << (7-i));
- 274:	2d 2f       	mov	r18, r29
- 276:	30 e0       	ldi	r19, 0x00	; 0
- 278:	87 e0       	ldi	r24, 0x07	; 7
- 27a:	90 e0       	ldi	r25, 0x00	; 0
- 27c:	8c 1b       	sub	r24, r28
- 27e:	91 09       	sbc	r25, r1
- 280:	61 e0       	ldi	r22, 0x01	; 1
- 282:	70 e0       	ldi	r23, 0x00	; 0
- 284:	ab 01       	movw	r20, r22
- 286:	02 c0       	rjmp	.+4      	; 0x28c <shiftOut+0x22>
- 288:	44 0f       	add	r20, r20
- 28a:	55 1f       	adc	r21, r21
- 28c:	8a 95       	dec	r24
- 28e:	e2 f7       	brpl	.-8      	; 0x288 <shiftOut+0x1e>
- 290:	b9 01       	movw	r22, r18
- 292:	64 23       	and	r22, r20
- 294:	75 23       	and	r23, r21
-		set(MOSI, bit);
- 296:	82 e0       	ldi	r24, 0x02	; 2
- 298:	cb df       	rcall	.-106    	; 0x230 <set>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 29a:	00 00       	nop
-
-		_delay_us(1);
-		set(SCK, 1);
- 29c:	61 e0       	ldi	r22, 0x01	; 1
- 29e:	81 e0       	ldi	r24, 0x01	; 1
- 2a0:	c7 df       	rcall	.-114    	; 0x230 <set>
- 2a2:	00 00       	nop
-		_delay_us(1);
-		set(SCK, 0);
- 2a4:	60 e0       	ldi	r22, 0x00	; 0
- 2a6:	81 e0       	ldi	r24, 0x01	; 1
- 2a8:	c3 df       	rcall	.-122    	; 0x230 <set>
-		PORTA |= (1 << pin);
-	}
-}
-
-void shiftOut(uint8_t data) {
-	for(uint8_t i = 0; i < 8; i++) {
- 2aa:	cf 5f       	subi	r28, 0xFF	; 255
- 2ac:	c8 30       	cpi	r28, 0x08	; 8
- 2ae:	10 f3       	brcs	.-60     	; 0x274 <shiftOut+0xa>
-		_delay_us(1);
-		set(SCK, 1);
-		_delay_us(1);
-		set(SCK, 0);
-	}
-}
- 2b0:	df 91       	pop	r29
- 2b2:	cf 91       	pop	r28
- 2b4:	08 95       	ret
-
-000002b6 <setMAXRegister>:
-
-void setMAXRegister(uint8_t reg, uint8_t value) {
- 2b6:	cf 93       	push	r28
- 2b8:	df 93       	push	r29
- 2ba:	d8 2f       	mov	r29, r24
- 2bc:	c6 2f       	mov	r28, r22
-	set(CS, 0);
- 2be:	60 e0       	ldi	r22, 0x00	; 0
- 2c0:	83 e0       	ldi	r24, 0x03	; 3
- 2c2:	b6 df       	rcall	.-148    	; 0x230 <set>
- 2c4:	00 00       	nop
-	_delay_us(1);
-	shiftOut(reg);
- 2c6:	8d 2f       	mov	r24, r29
- 2c8:	d0 df       	rcall	.-96     	; 0x26a <shiftOut>
-	shiftOut(value);
- 2ca:	8c 2f       	mov	r24, r28
- 2cc:	ce df       	rcall	.-100    	; 0x26a <shiftOut>
- 2ce:	00 00       	nop
-	_delay_us(1);
-	set(CS, 1);
- 2d0:	61 e0       	ldi	r22, 0x01	; 1
- 2d2:	83 e0       	ldi	r24, 0x03	; 3
- 2d4:	ad df       	rcall	.-166    	; 0x230 <set>
- 2d6:	00 00       	nop
-	_delay_us(1);
-}
- 2d8:	df 91       	pop	r29
- 2da:	cf 91       	pop	r28
- 2dc:	08 95       	ret
-
-000002de <setMAXDigit>:
-
-void setMAXDigit(uint8_t digit, uint8_t val, bool dot) {
- 2de:	cf 93       	push	r28
- 2e0:	df 93       	push	r29
- 2e2:	cd b7       	in	r28, 0x3d	; 61
- 2e4:	dd 27       	eor	r29, r29
- 2e6:	c4 50       	subi	r28, 0x04	; 4
- 2e8:	cd bf       	out	0x3d, r28	; 61
+00000226 <shiftOut>:
 	uint8_t lookup[] = {0, 2, 3, 1};
- 2ea:	19 82       	std	Y+1, r1	; 0x01
- 2ec:	92 e0       	ldi	r25, 0x02	; 2
- 2ee:	9a 83       	std	Y+2, r25	; 0x02
- 2f0:	93 e0       	ldi	r25, 0x03	; 3
- 2f2:	9b 83       	std	Y+3, r25	; 0x03
- 2f4:	91 e0       	ldi	r25, 0x01	; 1
- 2f6:	9c 83       	std	Y+4, r25	; 0x04
 	uint8_t dig = lookup[digit];
- 2f8:	e1 e0       	ldi	r30, 0x01	; 1
- 2fa:	f0 e0       	ldi	r31, 0x00	; 0
- 2fc:	ec 0f       	add	r30, r28
- 2fe:	fd 1f       	adc	r31, r29
- 300:	e8 0f       	add	r30, r24
- 302:	f1 1d       	adc	r31, r1
- 304:	80 81       	ld	r24, Z
 	if (dot == true) {
- 306:	41 11       	cpse	r20, r1
 		val |= (1 << 7);
- 308:	60 68       	ori	r22, 0x80	; 128
 	}
 	setMAXRegister(dig+1, val);
- 30a:	8f 5f       	subi	r24, 0xFF	; 255
- 30c:	d4 df       	rcall	.-88     	; 0x2b6 <setMAXRegister>
-}
- 30e:	cc 5f       	subi	r28, 0xFC	; 252
- 310:	cd bf       	out	0x3d, r28	; 61
- 312:	df 91       	pop	r29
- 314:	cf 91       	pop	r28
- 316:	08 95       	ret
+ 226:	27 e0       	ldi	r18, 0x07	; 7
+ 228:	30 e0       	ldi	r19, 0x00	; 0
+ 22a:	61 e0       	ldi	r22, 0x01	; 1
+ 22c:	70 e0       	ldi	r23, 0x00	; 0
+ 22e:	08 c0       	rjmp	.+16     	; 0x240 <shiftOut+0x1a>
+ 230:	da 9a       	sbi	0x1b, 2	; 27
+ 232:	00 00       	nop
+ 234:	d9 9a       	sbi	0x1b, 1	; 27
+ 236:	00 00       	nop
+ 238:	d9 98       	cbi	0x1b, 1	; 27
+ 23a:	21 50       	subi	r18, 0x01	; 1
+ 23c:	31 09       	sbc	r19, r1
+ 23e:	50 f0       	brcs	.+20     	; 0x254 <shiftOut+0x2e>
+ 240:	ab 01       	movw	r20, r22
+ 242:	02 2e       	mov	r0, r18
+ 244:	01 c0       	rjmp	.+2      	; 0x248 <shiftOut+0x22>
+ 246:	44 0f       	add	r20, r20
+ 248:	0a 94       	dec	r0
+ 24a:	ea f7       	brpl	.-6      	; 0x246 <shiftOut+0x20>
+ 24c:	48 23       	and	r20, r24
+ 24e:	81 f7       	brne	.-32     	; 0x230 <shiftOut+0xa>
+ 250:	da 98       	cbi	0x1b, 2	; 27
+ 252:	ef cf       	rjmp	.-34     	; 0x232 <shiftOut+0xc>
+ 254:	08 95       	ret
 
-00000318 <setMAXInteger>:
+00000256 <setMAXRegister>:
+ 256:	cf 93       	push	r28
+ 258:	c6 2f       	mov	r28, r22
+ 25a:	db 98       	cbi	0x1b, 3	; 27
+ 25c:	00 00       	nop
+ 25e:	e3 df       	rcall	.-58     	; 0x226 <shiftOut>
+ 260:	8c 2f       	mov	r24, r28
+ 262:	e1 df       	rcall	.-62     	; 0x226 <shiftOut>
+ 264:	00 00       	nop
+ 266:	db 9a       	sbi	0x1b, 3	; 27
+ 268:	00 00       	nop
+ 26a:	cf 91       	pop	r28
+ 26c:	08 95       	ret
 
-void setMAXInteger(uint16_t integer) {
- 318:	ef 92       	push	r14
- 31a:	ff 92       	push	r15
- 31c:	0f 93       	push	r16
- 31e:	1f 93       	push	r17
- 320:	cf 93       	push	r28
- 322:	df 93       	push	r29
-	integer %= 10000; // Trim extra digits that can't be displayed
- 324:	60 e1       	ldi	r22, 0x10	; 16
- 326:	77 e2       	ldi	r23, 0x27	; 39
- 328:	55 d2       	rcall	.+1194   	; 0x7d4 <__udivmodhi4>
- 32a:	ec 01       	movw	r28, r24
-
-
-	setMAXDigit(3, integer % 10, false);
- 32c:	0a e0       	ldi	r16, 0x0A	; 10
- 32e:	10 e0       	ldi	r17, 0x00	; 0
- 330:	b8 01       	movw	r22, r16
- 332:	50 d2       	rcall	.+1184   	; 0x7d4 <__udivmodhi4>
- 334:	7b 01       	movw	r14, r22
- 336:	40 e0       	ldi	r20, 0x00	; 0
- 338:	68 2f       	mov	r22, r24
- 33a:	83 e0       	ldi	r24, 0x03	; 3
- 33c:	d0 df       	rcall	.-96     	; 0x2de <setMAXDigit>
+0000026e <showVccVoltage>:
 	integer /= 10;
-	setMAXDigit(2, integer % 10, false);
- 33e:	c7 01       	movw	r24, r14
- 340:	b8 01       	movw	r22, r16
- 342:	48 d2       	rcall	.+1168   	; 0x7d4 <__udivmodhi4>
- 344:	40 e0       	ldi	r20, 0x00	; 0
- 346:	68 2f       	mov	r22, r24
- 348:	82 e0       	ldi	r24, 0x02	; 2
- 34a:	c9 df       	rcall	.-110    	; 0x2de <setMAXDigit>
-	integer /= 10;
- 34c:	ce 01       	movw	r24, r28
- 34e:	64 e6       	ldi	r22, 0x64	; 100
- 350:	70 e0       	ldi	r23, 0x00	; 0
- 352:	40 d2       	rcall	.+1152   	; 0x7d4 <__udivmodhi4>
- 354:	cb 01       	movw	r24, r22
-	setMAXDigit(1, integer % 10, false);
- 356:	b8 01       	movw	r22, r16
- 358:	3d d2       	rcall	.+1146   	; 0x7d4 <__udivmodhi4>
- 35a:	40 e0       	ldi	r20, 0x00	; 0
- 35c:	68 2f       	mov	r22, r24
- 35e:	81 e0       	ldi	r24, 0x01	; 1
- 360:	be df       	rcall	.-132    	; 0x2de <setMAXDigit>
-	integer /= 10;
- 362:	ce 01       	movw	r24, r28
- 364:	68 ee       	ldi	r22, 0xE8	; 232
- 366:	73 e0       	ldi	r23, 0x03	; 3
- 368:	35 d2       	rcall	.+1130   	; 0x7d4 <__udivmodhi4>
 	setMAXDigit(0, integer, false);
- 36a:	40 e0       	ldi	r20, 0x00	; 0
- 36c:	80 e0       	ldi	r24, 0x00	; 0
- 36e:	b7 df       	rcall	.-146    	; 0x2de <setMAXDigit>
 }
- 370:	df 91       	pop	r29
- 372:	cf 91       	pop	r28
- 374:	1f 91       	pop	r17
- 376:	0f 91       	pop	r16
- 378:	ff 90       	pop	r15
- 37a:	ef 90       	pop	r14
- 37c:	08 95       	ret
+*/
 
-0000037e <setMAXfromDS>:
+void showVccVoltage(uint16_t adcval) {
+ 26e:	cf 93       	push	r28
+ 270:	df 93       	push	r29
+	// Bandgap voltage: (actualVcc * adcReading) / 1024
+	// Vcc: (bandgapVoltage * 1024) / adcReading
+	
+	uint16_t num = 1116860 / adcval; // Multiplied by 100 to not have to deal with floats
+ 272:	9c 01       	movw	r18, r24
+ 274:	40 e0       	ldi	r20, 0x00	; 0
+ 276:	50 e0       	ldi	r21, 0x00	; 0
+ 278:	6c eb       	ldi	r22, 0xBC	; 188
+ 27a:	7a e0       	ldi	r23, 0x0A	; 10
+ 27c:	81 e1       	ldi	r24, 0x11	; 17
+ 27e:	90 e0       	ldi	r25, 0x00	; 0
+ 280:	ed d1       	rcall	.+986    	; 0x65c <__divmodsi4>
+	uint8_t lookup[] = {0, 2, 3, 1};
+	uint8_t dig = lookup[digit];
+	if (dot == true) {
+		val |= (1 << 7);
+	}
+	setMAXRegister(dig+1, val);
+ 282:	c9 01       	movw	r24, r18
+ 284:	68 ee       	ldi	r22, 0xE8	; 232
+ 286:	73 e0       	ldi	r23, 0x03	; 3
+ 288:	d5 d1       	rcall	.+938    	; 0x634 <__udivmodhi4>
+ 28a:	ec 01       	movw	r28, r24
+ 28c:	60 68       	ori	r22, 0x80	; 128
+ 28e:	81 e0       	ldi	r24, 0x01	; 1
+ 290:	e2 df       	rcall	.-60     	; 0x256 <setMAXRegister>
+ 292:	ce 01       	movw	r24, r28
+ 294:	64 e6       	ldi	r22, 0x64	; 100
+ 296:	70 e0       	ldi	r23, 0x00	; 0
+ 298:	cd d1       	rcall	.+922    	; 0x634 <__udivmodhi4>
+ 29a:	ec 01       	movw	r28, r24
+ 29c:	83 e0       	ldi	r24, 0x03	; 3
+ 29e:	db df       	rcall	.-74     	; 0x256 <setMAXRegister>
+ 2a0:	ce 01       	movw	r24, r28
+ 2a2:	6a e0       	ldi	r22, 0x0A	; 10
+ 2a4:	70 e0       	ldi	r23, 0x00	; 0
+ 2a6:	c6 d1       	rcall	.+908    	; 0x634 <__udivmodhi4>
+ 2a8:	c8 2f       	mov	r28, r24
+ 2aa:	84 e0       	ldi	r24, 0x04	; 4
+ 2ac:	d4 df       	rcall	.-88     	; 0x256 <setMAXRegister>
+ 2ae:	6c 2f       	mov	r22, r28
+ 2b0:	82 e0       	ldi	r24, 0x02	; 2
+	setMAXDigit(1, num / 100, false);
+	num = num % 100;
+	setMAXDigit(2, num / 10, false);
+	setMAXDigit(3, num % 10, false);
+	
+}
+ 2b2:	df 91       	pop	r29
+ 2b4:	cf 91       	pop	r28
+	uint8_t lookup[] = {0, 2, 3, 1};
+	uint8_t dig = lookup[digit];
+	if (dot == true) {
+		val |= (1 << 7);
+	}
+	setMAXRegister(dig+1, val);
+ 2b6:	cf cf       	rjmp	.-98     	; 0x256 <setMAXRegister>
+
+000002b8 <setMAXfromDS>:
+	setMAXDigit(2, num / 10, false);
+	setMAXDigit(3, num % 10, false);
+	
+}
 
 void setMAXfromDS(int16_t dstemp) {
- 37e:	ff 92       	push	r15
- 380:	0f 93       	push	r16
- 382:	1f 93       	push	r17
- 384:	cf 93       	push	r28
- 386:	df 93       	push	r29
+ 2b8:	ef 92       	push	r14
+ 2ba:	ff 92       	push	r15
+ 2bc:	0f 93       	push	r16
+ 2be:	1f 93       	push	r17
+ 2c0:	cf 93       	push	r28
+ 2c2:	df 93       	push	r29
 	if(dstemp >= 0) {
- 388:	99 23       	and	r25, r25
- 38a:	0c f4       	brge	.+2      	; 0x38e <setMAXfromDS+0x10>
- 38c:	8d c0       	rjmp	.+282    	; 0x4a8 <__LOCK_REGION_LENGTH__+0xa8>
+ 2c4:	97 fd       	sbrc	r25, 7
+ 2c6:	6d c0       	rjmp	.+218    	; 0x3a2 <setMAXfromDS+0xea>
+ 2c8:	ec 01       	movw	r28, r24
 		uint16_t temp_integer = dstemp / 16;
- 38e:	ac 01       	movw	r20, r24
- 390:	99 23       	and	r25, r25
- 392:	14 f4       	brge	.+4      	; 0x398 <setMAXfromDS+0x1a>
- 394:	41 5f       	subi	r20, 0xF1	; 241
- 396:	5f 4f       	sbci	r21, 0xFF	; 255
- 398:	9c 01       	movw	r18, r24
- 39a:	ca 01       	movw	r24, r20
- 39c:	95 95       	asr	r25
- 39e:	87 95       	ror	r24
- 3a0:	95 95       	asr	r25
- 3a2:	87 95       	ror	r24
- 3a4:	95 95       	asr	r25
- 3a6:	87 95       	ror	r24
- 3a8:	95 95       	asr	r25
- 3aa:	87 95       	ror	r24
+ 2ca:	95 95       	asr	r25
+ 2cc:	87 95       	ror	r24
+ 2ce:	95 95       	asr	r25
+ 2d0:	87 95       	ror	r24
+ 2d2:	95 95       	asr	r25
+ 2d4:	87 95       	ror	r24
+ 2d6:	95 95       	asr	r25
+ 2d8:	87 95       	ror	r24
 		if(dstemp < 100*16) { // Under 100C
- 3ac:	20 34       	cpi	r18, 0x40	; 64
- 3ae:	46 e0       	ldi	r20, 0x06	; 6
- 3b0:	34 07       	cpc	r19, r20
- 3b2:	0c f0       	brlt	.+2      	; 0x3b6 <setMAXfromDS+0x38>
- 3b4:	41 c0       	rjmp	.+130    	; 0x438 <__LOCK_REGION_LENGTH__+0x38>
-			uint16_t temp_fraction = ((dstemp % 16) * 100) / 16;
- 3b6:	2f 70       	andi	r18, 0x0F	; 15
- 3b8:	30 78       	andi	r19, 0x80	; 128
- 3ba:	33 23       	and	r19, r19
- 3bc:	34 f4       	brge	.+12     	; 0x3ca <setMAXfromDS+0x4c>
- 3be:	21 50       	subi	r18, 0x01	; 1
- 3c0:	31 09       	sbc	r19, r1
- 3c2:	20 6f       	ori	r18, 0xF0	; 240
- 3c4:	3f 6f       	ori	r19, 0xFF	; 255
- 3c6:	2f 5f       	subi	r18, 0xFF	; 255
- 3c8:	3f 4f       	sbci	r19, 0xFF	; 255
- 3ca:	a9 01       	movw	r20, r18
- 3cc:	44 0f       	add	r20, r20
- 3ce:	55 1f       	adc	r21, r21
- 3d0:	42 0f       	add	r20, r18
- 3d2:	53 1f       	adc	r21, r19
- 3d4:	ba 01       	movw	r22, r20
- 3d6:	66 0f       	add	r22, r22
- 3d8:	77 1f       	adc	r23, r23
- 3da:	62 95       	swap	r22
- 3dc:	72 95       	swap	r23
- 3de:	70 7f       	andi	r23, 0xF0	; 240
- 3e0:	76 27       	eor	r23, r22
- 3e2:	60 7f       	andi	r22, 0xF0	; 240
- 3e4:	76 27       	eor	r23, r22
- 3e6:	46 0f       	add	r20, r22
- 3e8:	57 1f       	adc	r21, r23
- 3ea:	24 0f       	add	r18, r20
- 3ec:	35 1f       	adc	r19, r21
- 3ee:	33 23       	and	r19, r19
- 3f0:	14 f4       	brge	.+4      	; 0x3f6 <setMAXfromDS+0x78>
- 3f2:	21 5f       	subi	r18, 0xF1	; 241
- 3f4:	3f 4f       	sbci	r19, 0xFF	; 255
- 3f6:	e9 01       	movw	r28, r18
- 3f8:	d5 95       	asr	r29
- 3fa:	c7 95       	ror	r28
- 3fc:	d5 95       	asr	r29
- 3fe:	c7 95       	ror	r28
- 400:	d5 95       	asr	r29
- 402:	c7 95       	ror	r28
- 404:	d5 95       	asr	r29
- 406:	c7 95       	ror	r28
-
-			setMAXDigit(0, temp_integer / 10, false);
- 408:	0a e0       	ldi	r16, 0x0A	; 10
- 40a:	10 e0       	ldi	r17, 0x00	; 0
- 40c:	b8 01       	movw	r22, r16
- 40e:	e2 d1       	rcall	.+964    	; 0x7d4 <__udivmodhi4>
- 410:	f8 2e       	mov	r15, r24
- 412:	40 e0       	ldi	r20, 0x00	; 0
- 414:	80 e0       	ldi	r24, 0x00	; 0
- 416:	63 df       	rcall	.-314    	; 0x2de <setMAXDigit>
-			setMAXDigit(1, temp_integer % 10, true);
- 418:	41 e0       	ldi	r20, 0x01	; 1
- 41a:	6f 2d       	mov	r22, r15
- 41c:	81 e0       	ldi	r24, 0x01	; 1
- 41e:	5f df       	rcall	.-322    	; 0x2de <setMAXDigit>
-			setMAXDigit(2, temp_fraction / 10, false);
- 420:	ce 01       	movw	r24, r28
- 422:	b8 01       	movw	r22, r16
- 424:	d7 d1       	rcall	.+942    	; 0x7d4 <__udivmodhi4>
- 426:	c8 2f       	mov	r28, r24
- 428:	40 e0       	ldi	r20, 0x00	; 0
- 42a:	82 e0       	ldi	r24, 0x02	; 2
- 42c:	58 df       	rcall	.-336    	; 0x2de <setMAXDigit>
-			setMAXDigit(3, temp_fraction % 10, false);
- 42e:	40 e0       	ldi	r20, 0x00	; 0
- 430:	6c 2f       	mov	r22, r28
- 432:	83 e0       	ldi	r24, 0x03	; 3
- 434:	54 df       	rcall	.-344    	; 0x2de <setMAXDigit>
- 436:	38 c0       	rjmp	.+112    	; 0x4a8 <__LOCK_REGION_LENGTH__+0xa8>
-		}
-		else { // Over 100C
-			uint16_t temp_fraction = ((dstemp % 16) * 10) / 16;
- 438:	2f 70       	andi	r18, 0x0F	; 15
- 43a:	30 78       	andi	r19, 0x80	; 128
- 43c:	33 23       	and	r19, r19
- 43e:	34 f4       	brge	.+12     	; 0x44c <__LOCK_REGION_LENGTH__+0x4c>
- 440:	21 50       	subi	r18, 0x01	; 1
- 442:	31 09       	sbc	r19, r1
- 444:	20 6f       	ori	r18, 0xF0	; 240
- 446:	3f 6f       	ori	r19, 0xFF	; 255
- 448:	2f 5f       	subi	r18, 0xFF	; 255
- 44a:	3f 4f       	sbci	r19, 0xFF	; 255
- 44c:	a9 01       	movw	r20, r18
- 44e:	44 0f       	add	r20, r20
- 450:	55 1f       	adc	r21, r21
- 452:	44 0f       	add	r20, r20
- 454:	55 1f       	adc	r21, r21
- 456:	24 0f       	add	r18, r20
- 458:	35 1f       	adc	r19, r21
- 45a:	22 0f       	add	r18, r18
- 45c:	33 1f       	adc	r19, r19
- 45e:	b9 01       	movw	r22, r18
- 460:	33 23       	and	r19, r19
- 462:	14 f4       	brge	.+4      	; 0x468 <__LOCK_REGION_LENGTH__+0x68>
- 464:	61 5f       	subi	r22, 0xF1	; 241
- 466:	7f 4f       	sbci	r23, 0xFF	; 255
- 468:	eb 01       	movw	r28, r22
- 46a:	d5 95       	asr	r29
- 46c:	c7 95       	ror	r28
- 46e:	d5 95       	asr	r29
- 470:	c7 95       	ror	r28
- 472:	d5 95       	asr	r29
- 474:	c7 95       	ror	r28
- 476:	d5 95       	asr	r29
- 478:	c7 95       	ror	r28
-				
-			setMAXDigit(0, temp_integer / 100, false);
- 47a:	64 e6       	ldi	r22, 0x64	; 100
- 47c:	70 e0       	ldi	r23, 0x00	; 0
- 47e:	aa d1       	rcall	.+852    	; 0x7d4 <__udivmodhi4>
- 480:	8c 01       	movw	r16, r24
- 482:	40 e0       	ldi	r20, 0x00	; 0
- 484:	80 e0       	ldi	r24, 0x00	; 0
- 486:	2b df       	rcall	.-426    	; 0x2de <setMAXDigit>
-			temp_integer = temp_integer % 100;
-			setMAXDigit(1, temp_integer / 10, false);
- 488:	c8 01       	movw	r24, r16
- 48a:	6a e0       	ldi	r22, 0x0A	; 10
- 48c:	70 e0       	ldi	r23, 0x00	; 0
- 48e:	a2 d1       	rcall	.+836    	; 0x7d4 <__udivmodhi4>
- 490:	d8 2f       	mov	r29, r24
- 492:	40 e0       	ldi	r20, 0x00	; 0
- 494:	81 e0       	ldi	r24, 0x01	; 1
- 496:	23 df       	rcall	.-442    	; 0x2de <setMAXDigit>
-			setMAXDigit(2, temp_integer % 10, true);
- 498:	41 e0       	ldi	r20, 0x01	; 1
- 49a:	6d 2f       	mov	r22, r29
- 49c:	82 e0       	ldi	r24, 0x02	; 2
- 49e:	1f df       	rcall	.-450    	; 0x2de <setMAXDigit>
-			setMAXDigit(3, temp_fraction, false);
- 4a0:	40 e0       	ldi	r20, 0x00	; 0
- 4a2:	6c 2f       	mov	r22, r28
- 4a4:	83 e0       	ldi	r24, 0x03	; 3
- 4a6:	1b df       	rcall	.-458    	; 0x2de <setMAXDigit>
+ 2da:	c0 34       	cpi	r28, 0x40	; 64
+ 2dc:	26 e0       	ldi	r18, 0x06	; 6
+ 2de:	d2 07       	cpc	r29, r18
+ 2e0:	4c f1       	brlt	.+82     	; 0x334 <setMAXfromDS+0x7c>
+	uint8_t lookup[] = {0, 2, 3, 1};
+	uint8_t dig = lookup[digit];
+	if (dot == true) {
+		val |= (1 << 7);
+	}
+	setMAXRegister(dig+1, val);
+ 2e2:	64 e6       	ldi	r22, 0x64	; 100
+ 2e4:	70 e0       	ldi	r23, 0x00	; 0
+ 2e6:	a6 d1       	rcall	.+844    	; 0x634 <__udivmodhi4>
+ 2e8:	8c 01       	movw	r16, r24
+ 2ea:	81 e0       	ldi	r24, 0x01	; 1
+ 2ec:	b4 df       	rcall	.-152    	; 0x256 <setMAXRegister>
+ 2ee:	c8 01       	movw	r24, r16
+ 2f0:	6a e0       	ldi	r22, 0x0A	; 10
+ 2f2:	70 e0       	ldi	r23, 0x00	; 0
+ 2f4:	9f d1       	rcall	.+830    	; 0x634 <__udivmodhi4>
+ 2f6:	18 2f       	mov	r17, r24
+ 2f8:	83 e0       	ldi	r24, 0x03	; 3
+ 2fa:	ad df       	rcall	.-166    	; 0x256 <setMAXRegister>
+ 2fc:	61 2f       	mov	r22, r17
+ 2fe:	60 68       	ori	r22, 0x80	; 128
+ 300:	84 e0       	ldi	r24, 0x04	; 4
+ 302:	a9 df       	rcall	.-174    	; 0x256 <setMAXRegister>
+ 304:	cf 70       	andi	r28, 0x0F	; 15
+ 306:	dd 27       	eor	r29, r29
+ 308:	be 01       	movw	r22, r28
+ 30a:	66 0f       	add	r22, r22
+ 30c:	77 1f       	adc	r23, r23
+ 30e:	66 0f       	add	r22, r22
+ 310:	77 1f       	adc	r23, r23
+ 312:	c6 0f       	add	r28, r22
+ 314:	d7 1f       	adc	r29, r23
+ 316:	be 01       	movw	r22, r28
+ 318:	75 95       	asr	r23
+ 31a:	67 95       	ror	r22
+ 31c:	75 95       	asr	r23
+ 31e:	67 95       	ror	r22
+ 320:	75 95       	asr	r23
+ 322:	67 95       	ror	r22
+ 324:	82 e0       	ldi	r24, 0x02	; 2
 		}
 	}
 	else {
 		//TODO - negative temp handling
 	}
 }
- 4a8:	df 91       	pop	r29
- 4aa:	cf 91       	pop	r28
- 4ac:	1f 91       	pop	r17
- 4ae:	0f 91       	pop	r16
- 4b0:	ff 90       	pop	r15
- 4b2:	08 95       	ret
+ 326:	df 91       	pop	r29
+ 328:	cf 91       	pop	r28
+ 32a:	1f 91       	pop	r17
+ 32c:	0f 91       	pop	r16
+ 32e:	ff 90       	pop	r15
+ 330:	ef 90       	pop	r14
+	uint8_t lookup[] = {0, 2, 3, 1};
+	uint8_t dig = lookup[digit];
+	if (dot == true) {
+		val |= (1 << 7);
+	}
+	setMAXRegister(dig+1, val);
+ 332:	91 cf       	rjmp	.-222    	; 0x256 <setMAXRegister>
 
-000004b4 <main>:
+void setMAXfromDS(int16_t dstemp) {
+	if(dstemp >= 0) {
+		uint16_t temp_integer = dstemp / 16;
+		if(dstemp < 100*16) { // Under 100C
+			uint16_t temp_fraction = ((dstemp % 16) * 100) / 16;
+ 334:	cf 70       	andi	r28, 0x0F	; 15
+ 336:	dd 27       	eor	r29, r29
+ 338:	9e 01       	movw	r18, r28
+ 33a:	22 0f       	add	r18, r18
+ 33c:	33 1f       	adc	r19, r19
+ 33e:	2c 0f       	add	r18, r28
+ 340:	3d 1f       	adc	r19, r29
+ 342:	a9 01       	movw	r20, r18
+ 344:	44 0f       	add	r20, r20
+ 346:	55 1f       	adc	r21, r21
+ 348:	42 95       	swap	r20
+ 34a:	52 95       	swap	r21
+ 34c:	50 7f       	andi	r21, 0xF0	; 240
+ 34e:	54 27       	eor	r21, r20
+ 350:	40 7f       	andi	r20, 0xF0	; 240
+ 352:	54 27       	eor	r21, r20
+ 354:	24 0f       	add	r18, r20
+ 356:	35 1f       	adc	r19, r21
+ 358:	c2 0f       	add	r28, r18
+ 35a:	d3 1f       	adc	r29, r19
+ 35c:	d5 95       	asr	r29
+ 35e:	c7 95       	ror	r28
+ 360:	d5 95       	asr	r29
+ 362:	c7 95       	ror	r28
+ 364:	d5 95       	asr	r29
+ 366:	c7 95       	ror	r28
+ 368:	d5 95       	asr	r29
+ 36a:	c7 95       	ror	r28
+	uint8_t lookup[] = {0, 2, 3, 1};
+	uint8_t dig = lookup[digit];
+	if (dot == true) {
+		val |= (1 << 7);
+	}
+	setMAXRegister(dig+1, val);
+ 36c:	ea e0       	ldi	r30, 0x0A	; 10
+ 36e:	ee 2e       	mov	r14, r30
+ 370:	f1 2c       	mov	r15, r1
+ 372:	b7 01       	movw	r22, r14
+ 374:	5f d1       	rcall	.+702    	; 0x634 <__udivmodhi4>
+ 376:	18 2f       	mov	r17, r24
+ 378:	81 e0       	ldi	r24, 0x01	; 1
+ 37a:	6d df       	rcall	.-294    	; 0x256 <setMAXRegister>
+ 37c:	61 2f       	mov	r22, r17
+ 37e:	60 68       	ori	r22, 0x80	; 128
+ 380:	83 e0       	ldi	r24, 0x03	; 3
+ 382:	69 df       	rcall	.-302    	; 0x256 <setMAXRegister>
+ 384:	ce 01       	movw	r24, r28
+ 386:	b7 01       	movw	r22, r14
+ 388:	55 d1       	rcall	.+682    	; 0x634 <__udivmodhi4>
+ 38a:	c8 2f       	mov	r28, r24
+ 38c:	84 e0       	ldi	r24, 0x04	; 4
+ 38e:	63 df       	rcall	.-314    	; 0x256 <setMAXRegister>
+ 390:	6c 2f       	mov	r22, r28
+ 392:	82 e0       	ldi	r24, 0x02	; 2
+		}
+	}
+	else {
+		//TODO - negative temp handling
+	}
+}
+ 394:	df 91       	pop	r29
+ 396:	cf 91       	pop	r28
+ 398:	1f 91       	pop	r17
+ 39a:	0f 91       	pop	r16
+ 39c:	ff 90       	pop	r15
+ 39e:	ef 90       	pop	r14
+	uint8_t lookup[] = {0, 2, 3, 1};
+	uint8_t dig = lookup[digit];
+	if (dot == true) {
+		val |= (1 << 7);
+	}
+	setMAXRegister(dig+1, val);
+ 3a0:	5a cf       	rjmp	.-332    	; 0x256 <setMAXRegister>
+		}
+	}
+	else {
+		//TODO - negative temp handling
+	}
+}
+ 3a2:	df 91       	pop	r29
+ 3a4:	cf 91       	pop	r28
+ 3a6:	1f 91       	pop	r17
+ 3a8:	0f 91       	pop	r16
+ 3aa:	ff 90       	pop	r15
+ 3ac:	ef 90       	pop	r14
+ 3ae:	08 95       	ret
+
+000003b0 <main>:
 
 int main(void) {
- 4b4:	cf 93       	push	r28
- 4b6:	df 93       	push	r29
- 4b8:	cd b7       	in	r28, 0x3d	; 61
- 4ba:	dd 27       	eor	r29, r29
- 4bc:	c4 50       	subi	r28, 0x04	; 4
- 4be:	cd bf       	out	0x3d, r28	; 61
+ 3b0:	cf 93       	push	r28
+ 3b2:	df 93       	push	r29
+ 3b4:	cd b7       	in	r28, 0x3d	; 61
+ 3b6:	dd 27       	eor	r29, r29
+ 3b8:	c4 50       	subi	r28, 0x04	; 4
+ 3ba:	cd bf       	out	0x3d, r28	; 61
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 3bc:	2f e9       	ldi	r18, 0x9F	; 159
+ 3be:	86 e8       	ldi	r24, 0x86	; 134
+ 3c0:	91 e0       	ldi	r25, 0x01	; 1
+ 3c2:	21 50       	subi	r18, 0x01	; 1
+ 3c4:	80 40       	sbci	r24, 0x00	; 0
+ 3c6:	90 40       	sbci	r25, 0x00	; 0
+ 3c8:	e1 f7       	brne	.-8      	; 0x3c2 <main+0x12>
+ 3ca:	00 c0       	rjmp	.+0      	; 0x3cc <main+0x1c>
+ 3cc:	00 00       	nop
+	_delay_ms(500);
 	DDRA |= (1 << CS);
- 4c0:	8a b3       	in	r24, 0x1a	; 26
- 4c2:	88 60       	ori	r24, 0x08	; 8
- 4c4:	8a bb       	out	0x1a, r24	; 26
+ 3ce:	d3 9a       	sbi	0x1a, 3	; 26
 	DDRA |= (1 << SCK);
- 4c6:	8a b3       	in	r24, 0x1a	; 26
- 4c8:	82 60       	ori	r24, 0x02	; 2
- 4ca:	8a bb       	out	0x1a, r24	; 26
+ 3d0:	d1 9a       	sbi	0x1a, 1	; 26
 	DDRA |= (1 << MOSI);
- 4cc:	8a b3       	in	r24, 0x1a	; 26
- 4ce:	84 60       	ori	r24, 0x04	; 4
- 4d0:	8a bb       	out	0x1a, r24	; 26
+ 3d2:	d2 9a       	sbi	0x1a, 2	; 26
+void set(uint8_t pin, uint8_t val) {
+	if (val == 0) {
+		PORTA &= ~(1 << pin);
+	}
+	else {
+		PORTA |= (1 << pin);
+ 3d4:	db 9a       	sbi	0x1b, 3	; 27
+#define MOSI 2
+#define SCK 1
+
+void set(uint8_t pin, uint8_t val) {
+	if (val == 0) {
+		PORTA &= ~(1 << pin);
+ 3d6:	d9 98       	cbi	0x1b, 1	; 27
+ 3d8:	da 98       	cbi	0x1b, 2	; 27
 	
 	set(CS, 1);
- 4d2:	61 e0       	ldi	r22, 0x01	; 1
- 4d4:	83 e0       	ldi	r24, 0x03	; 3
- 4d6:	ac de       	rcall	.-680    	; 0x230 <set>
 	set(SCK, 0);
- 4d8:	60 e0       	ldi	r22, 0x00	; 0
- 4da:	81 e0       	ldi	r24, 0x01	; 1
- 4dc:	a9 de       	rcall	.-686    	; 0x230 <set>
 	set(MOSI, 0);
- 4de:	60 e0       	ldi	r22, 0x00	; 0
- 4e0:	82 e0       	ldi	r24, 0x02	; 2
- 4e2:	a6 de       	rcall	.-692    	; 0x230 <set>
 	
 	ADMUX = 0b00100001; // Vcc as reference, measuring 1.1V internal bandgap
- 4e4:	81 e2       	ldi	r24, 0x21	; 33
- 4e6:	87 b9       	out	0x07, r24	; 7
+ 3da:	81 e2       	ldi	r24, 0x21	; 33
+ 3dc:	87 b9       	out	0x07, r24	; 7
 	ADCSRA = 0b10000100; // Enable ADC, prescaler 16
- 4e8:	84 e8       	ldi	r24, 0x84	; 132
- 4ea:	86 b9       	out	0x06, r24	; 6
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 4ec:	89 ef       	ldi	r24, 0xF9	; 249
- 4ee:	90 e0       	ldi	r25, 0x00	; 0
- 4f0:	01 97       	sbiw	r24, 0x01	; 1
- 4f2:	f1 f7       	brne	.-4      	; 0x4f0 <main+0x3c>
- 4f4:	00 c0       	rjmp	.+0      	; 0x4f6 <main+0x42>
- 4f6:	00 00       	nop
+ 3de:	84 e8       	ldi	r24, 0x84	; 132
+ 3e0:	86 b9       	out	0x06, r24	; 6
+ 3e2:	e9 ef       	ldi	r30, 0xF9	; 249
+ 3e4:	f0 e0       	ldi	r31, 0x00	; 0
+ 3e6:	31 97       	sbiw	r30, 0x01	; 1
+ 3e8:	f1 f7       	brne	.-4      	; 0x3e6 <main+0x36>
+ 3ea:	00 c0       	rjmp	.+0      	; 0x3ec <main+0x3c>
+ 3ec:	00 00       	nop
 	_delay_ms(1);
-
-	// Sum 1000 ADC readings
-	uint16_t adc_sum = 0;
-	for(uint16_t i = 0; i < 1000; i++) {
- 4f8:	60 e0       	ldi	r22, 0x00	; 0
- 4fa:	70 e0       	ldi	r23, 0x00	; 0
-	ADMUX = 0b00100001; // Vcc as reference, measuring 1.1V internal bandgap
-	ADCSRA = 0b10000100; // Enable ADC, prescaler 16
-	_delay_ms(1);
-
-	// Sum 1000 ADC readings
-	uint16_t adc_sum = 0;
- 4fc:	e0 e0       	ldi	r30, 0x00	; 0
- 4fe:	f0 e0       	ldi	r31, 0x00	; 0
-	for(uint16_t i = 0; i < 1000; i++) {
- 500:	18 c0       	rjmp	.+48     	; 0x532 <main+0x7e>
-		ADCSRA |= (1 << ADSC); // Start conversion
- 502:	86 b1       	in	r24, 0x06	; 6
- 504:	80 64       	ori	r24, 0x40	; 64
- 506:	86 b9       	out	0x06, r24	; 6
-		while(!(ADCSRA & (1 << ADIF))); // Wait for conversion to complete
- 508:	34 9b       	sbis	0x06, 4	; 6
- 50a:	fe cf       	rjmp	.-4      	; 0x508 <main+0x54>
-		ADCSRA |= (1 << ADIF); // Clear the ADC interrupt flag
- 50c:	96 b1       	in	r25, 0x06	; 6
- 50e:	90 61       	ori	r25, 0x10	; 16
- 510:	96 b9       	out	0x06, r25	; 6
-		volatile uint16_t adcl = ADCL; // Read lower byte
- 512:	24 b1       	in	r18, 0x04	; 4
- 514:	30 e0       	ldi	r19, 0x00	; 0
- 516:	3c 83       	std	Y+4, r19	; 0x04
- 518:	2b 83       	std	Y+3, r18	; 0x03
-		adc_sum += (((uint16_t)ADCH) << 8) | adcl; // Read upper byte and merge into uint16_t
- 51a:	25 b1       	in	r18, 0x05	; 5
- 51c:	30 e0       	ldi	r19, 0x00	; 0
- 51e:	32 2f       	mov	r19, r18
- 520:	22 27       	eor	r18, r18
- 522:	4b 81       	ldd	r20, Y+3	; 0x03
- 524:	5c 81       	ldd	r21, Y+4	; 0x04
- 526:	24 2b       	or	r18, r20
- 528:	35 2b       	or	r19, r21
- 52a:	e2 0f       	add	r30, r18
- 52c:	f3 1f       	adc	r31, r19
-	ADCSRA = 0b10000100; // Enable ADC, prescaler 16
-	_delay_ms(1);
-
-	// Sum 1000 ADC readings
-	uint16_t adc_sum = 0;
-	for(uint16_t i = 0; i < 1000; i++) {
- 52e:	6f 5f       	subi	r22, 0xFF	; 255
- 530:	7f 4f       	sbci	r23, 0xFF	; 255
- 532:	68 3e       	cpi	r22, 0xE8	; 232
- 534:	93 e0       	ldi	r25, 0x03	; 3
- 536:	79 07       	cpc	r23, r25
- 538:	20 f3       	brcs	.-56     	; 0x502 <main+0x4e>
-		ADCSRA |= (1 << ADIF); // Clear the ADC interrupt flag
-		volatile uint16_t adcl = ADCL; // Read lower byte
-		adc_sum += (((uint16_t)ADCH) << 8) | adcl; // Read upper byte and merge into uint16_t
-	}
-
-	adc_sum /= 1000; // Calculate the average
- 53a:	cf 01       	movw	r24, r30
- 53c:	68 ee       	ldi	r22, 0xE8	; 232
- 53e:	73 e0       	ldi	r23, 0x03	; 3
- 540:	49 d1       	rcall	.+658    	; 0x7d4 <__udivmodhi4>
- 542:	4b 01       	movw	r8, r22
- 544:	83 ec       	ldi	r24, 0xC3	; 195
- 546:	99 e0       	ldi	r25, 0x09	; 9
- 548:	01 97       	sbiw	r24, 0x01	; 1
- 54a:	f1 f7       	brne	.-4      	; 0x548 <main+0x94>
- 54c:	00 c0       	rjmp	.+0      	; 0x54e <main+0x9a>
- 54e:	00 00       	nop
-	
-	
-	
-	_delay_ms(10);
 
 	setMAXRegister(0x0C, 1);	// Shutdown -> Normal mode
- 550:	61 e0       	ldi	r22, 0x01	; 1
- 552:	8c e0       	ldi	r24, 0x0C	; 12
- 554:	b0 de       	rcall	.-672    	; 0x2b6 <setMAXRegister>
+ 3ee:	61 e0       	ldi	r22, 0x01	; 1
+ 3f0:	8c e0       	ldi	r24, 0x0C	; 12
+ 3f2:	31 df       	rcall	.-414    	; 0x256 <setMAXRegister>
 	setMAXRegister(0x0F, 0);	// Display Test -> Normal mode
- 556:	60 e0       	ldi	r22, 0x00	; 0
- 558:	8f e0       	ldi	r24, 0x0F	; 15
- 55a:	ad de       	rcall	.-678    	; 0x2b6 <setMAXRegister>
+ 3f4:	60 e0       	ldi	r22, 0x00	; 0
+ 3f6:	8f e0       	ldi	r24, 0x0F	; 15
+ 3f8:	2e df       	rcall	.-420    	; 0x256 <setMAXRegister>
 	setMAXRegister(0x09, 0x0F);	// Decode Mode -> Code B decode for digits 0-3
- 55c:	6f e0       	ldi	r22, 0x0F	; 15
- 55e:	89 e0       	ldi	r24, 0x09	; 9
- 560:	aa de       	rcall	.-684    	; 0x2b6 <setMAXRegister>
+ 3fa:	6f e0       	ldi	r22, 0x0F	; 15
+ 3fc:	89 e0       	ldi	r24, 0x09	; 9
+ 3fe:	2b df       	rcall	.-426    	; 0x256 <setMAXRegister>
 	setMAXRegister(0x0A, 0);	// Intensity -> 0
- 562:	60 e0       	ldi	r22, 0x00	; 0
- 564:	8a e0       	ldi	r24, 0x0A	; 10
- 566:	a7 de       	rcall	.-690    	; 0x2b6 <setMAXRegister>
+ 400:	60 e0       	ldi	r22, 0x00	; 0
+ 402:	8a e0       	ldi	r24, 0x0A	; 10
+ 404:	28 df       	rcall	.-432    	; 0x256 <setMAXRegister>
 	setMAXRegister(0x0B, 3);	// Scan Limit -> 0,1,2,3
- 568:	63 e0       	ldi	r22, 0x03	; 3
- 56a:	8b e0       	ldi	r24, 0x0B	; 11
- 56c:	a4 de       	rcall	.-696    	; 0x2b6 <setMAXRegister>
-
-	setMAXDigit(0, 8, true);
- 56e:	41 e0       	ldi	r20, 0x01	; 1
- 570:	68 e0       	ldi	r22, 0x08	; 8
- 572:	80 e0       	ldi	r24, 0x00	; 0
- 574:	b4 de       	rcall	.-664    	; 0x2de <setMAXDigit>
-	setMAXDigit(1, 8, true);
- 576:	41 e0       	ldi	r20, 0x01	; 1
- 578:	68 e0       	ldi	r22, 0x08	; 8
- 57a:	81 e0       	ldi	r24, 0x01	; 1
- 57c:	b0 de       	rcall	.-672    	; 0x2de <setMAXDigit>
-	setMAXDigit(2, 8, true);
- 57e:	41 e0       	ldi	r20, 0x01	; 1
- 580:	68 e0       	ldi	r22, 0x08	; 8
- 582:	82 e0       	ldi	r24, 0x02	; 2
- 584:	ac de       	rcall	.-680    	; 0x2de <setMAXDigit>
-	setMAXDigit(3, 8, true);
- 586:	41 e0       	ldi	r20, 0x01	; 1
- 588:	68 e0       	ldi	r22, 0x08	; 8
- 58a:	83 e0       	ldi	r24, 0x03	; 3
- 58c:	a8 de       	rcall	.-688    	; 0x2de <setMAXDigit>
+ 406:	63 e0       	ldi	r22, 0x03	; 3
+ 408:	8b e0       	ldi	r24, 0x0B	; 11
+ 40a:	25 df       	rcall	.-438    	; 0x256 <setMAXRegister>
+ 40c:	8f e4       	ldi	r24, 0x4F	; 79
+ 40e:	93 ec       	ldi	r25, 0xC3	; 195
+ 410:	01 97       	sbiw	r24, 0x01	; 1
+ 412:	f1 f7       	brne	.-4      	; 0x410 <__LOCK_REGION_LENGTH__+0x10>
+ 414:	00 c0       	rjmp	.+0      	; 0x416 <__LOCK_REGION_LENGTH__+0x16>
+ 416:	00 00       	nop
+	_delay_ms(200);
 
 	ds18b20wsp(&PORTB, &DDRB, &PINB, ( 1 << 2 ), 0, 0, 125, DS18B20_RES11);
- 58e:	68 94       	set
- 590:	aa 24       	eor	r10, r10
- 592:	a6 f8       	bld	r10, 6
- 594:	0f 2e       	mov	r0, r31
- 596:	fd e7       	ldi	r31, 0x7D	; 125
- 598:	cf 2e       	mov	r12, r31
- 59a:	f0 2d       	mov	r31, r0
- 59c:	e1 2c       	mov	r14, r1
- 59e:	00 e0       	ldi	r16, 0x00	; 0
- 5a0:	10 e0       	ldi	r17, 0x00	; 0
- 5a2:	24 e0       	ldi	r18, 0x04	; 4
- 5a4:	46 e3       	ldi	r20, 0x36	; 54
- 5a6:	50 e0       	ldi	r21, 0x00	; 0
- 5a8:	67 e3       	ldi	r22, 0x37	; 55
- 5aa:	70 e0       	ldi	r23, 0x00	; 0
- 5ac:	88 e3       	ldi	r24, 0x38	; 56
- 5ae:	90 e0       	ldi	r25, 0x00	; 0
- 5b0:	d5 dd       	rcall	.-1110   	; 0x15c <ds18b20wsp>
-	
-	setMAXInteger(adc_sum);
- 5b2:	c4 01       	movw	r24, r8
- 5b4:	b1 de       	rcall	.-670    	; 0x318 <setMAXInteger>
- 5b6:	9f e7       	ldi	r25, 0x7F	; 127
- 5b8:	2a e1       	ldi	r18, 0x1A	; 26
- 5ba:	86 e0       	ldi	r24, 0x06	; 6
- 5bc:	91 50       	subi	r25, 0x01	; 1
- 5be:	20 40       	sbci	r18, 0x00	; 0
- 5c0:	80 40       	sbci	r24, 0x00	; 0
- 5c2:	e1 f7       	brne	.-8      	; 0x5bc <main+0x108>
- 5c4:	00 c0       	rjmp	.+0      	; 0x5c6 <main+0x112>
- 5c6:	00 00       	nop
-	_delay_ms(2000);
+ 418:	80 e4       	ldi	r24, 0x40	; 64
+ 41a:	a8 2e       	mov	r10, r24
+ 41c:	9d e7       	ldi	r25, 0x7D	; 125
+ 41e:	c9 2e       	mov	r12, r25
+ 420:	e1 2c       	mov	r14, r1
+ 422:	00 e0       	ldi	r16, 0x00	; 0
+ 424:	10 e0       	ldi	r17, 0x00	; 0
+ 426:	24 e0       	ldi	r18, 0x04	; 4
+ 428:	46 e3       	ldi	r20, 0x36	; 54
+ 42a:	50 e0       	ldi	r21, 0x00	; 0
+ 42c:	67 e3       	ldi	r22, 0x37	; 55
+ 42e:	70 e0       	ldi	r23, 0x00	; 0
+ 430:	88 e3       	ldi	r24, 0x38	; 56
+ 432:	90 e0       	ldi	r25, 0x00	; 0
+ 434:	8e de       	rcall	.-740    	; 0x152 <ds18b20wsp>
+ 436:	2e e1       	ldi	r18, 0x1E	; 30
+ 438:	f2 2e       	mov	r15, r18
+			ADCSRA |= (1 << ADIF); // Clear the ADC interrupt flag
+			volatile uint16_t adcl = ADCL; // Read lower byte
+			adcsum += (((uint16_t)ADCH) << 8) | adcl; // Read upper byte and merge into uint16_t
+			_delay_ms(1);
+		}
+		showVccVoltage(adcsum / 100);
+ 43a:	04 e6       	ldi	r16, 0x64	; 100
+ 43c:	10 e0       	ldi	r17, 0x00	; 0
+	else {
+		//TODO - negative temp handling
+	}
+}
 
+int main(void) {
+ 43e:	94 e6       	ldi	r25, 0x64	; 100
+ 440:	40 e0       	ldi	r20, 0x00	; 0
+ 442:	50 e0       	ldi	r21, 0x00	; 0
+	ds18b20wsp(&PORTB, &DDRB, &PINB, ( 1 << 2 ), 0, 0, 125, DS18B20_RES11);
+	
+	for(uint8_t j = 0; j < 30; j++) {
+		uint16_t adcsum = 0;
+		for(uint8_t i = 0; i < 100; i++) {
+			ADCSRA |= (1 << ADSC); // Start conversion
+ 444:	36 9a       	sbi	0x06, 6	; 6
+			while(!(ADCSRA & (1 << ADIF))); // Wait for conversion to complete
+ 446:	34 9b       	sbis	0x06, 4	; 6
+ 448:	fe cf       	rjmp	.-4      	; 0x446 <__LOCK_REGION_LENGTH__+0x46>
+			ADCSRA |= (1 << ADIF); // Clear the ADC interrupt flag
+ 44a:	34 9a       	sbi	0x06, 4	; 6
+			volatile uint16_t adcl = ADCL; // Read lower byte
+ 44c:	24 b1       	in	r18, 0x04	; 4
+ 44e:	30 e0       	ldi	r19, 0x00	; 0
+ 450:	3c 83       	std	Y+4, r19	; 0x04
+ 452:	2b 83       	std	Y+3, r18	; 0x03
+			adcsum += (((uint16_t)ADCH) << 8) | adcl; // Read upper byte and merge into uint16_t
+ 454:	85 b1       	in	r24, 0x05	; 5
+ 456:	2b 81       	ldd	r18, Y+3	; 0x03
+ 458:	3c 81       	ldd	r19, Y+4	; 0x04
+ 45a:	38 2b       	or	r19, r24
+ 45c:	42 0f       	add	r20, r18
+ 45e:	53 1f       	adc	r21, r19
+ 460:	e9 ef       	ldi	r30, 0xF9	; 249
+ 462:	f0 e0       	ldi	r31, 0x00	; 0
+ 464:	31 97       	sbiw	r30, 0x01	; 1
+ 466:	f1 f7       	brne	.-4      	; 0x464 <__LOCK_REGION_LENGTH__+0x64>
+ 468:	00 c0       	rjmp	.+0      	; 0x46a <__LOCK_REGION_LENGTH__+0x6a>
+ 46a:	00 00       	nop
+ 46c:	91 50       	subi	r25, 0x01	; 1
+
+	ds18b20wsp(&PORTB, &DDRB, &PINB, ( 1 << 2 ), 0, 0, 125, DS18B20_RES11);
+	
+	for(uint8_t j = 0; j < 30; j++) {
+		uint16_t adcsum = 0;
+		for(uint8_t i = 0; i < 100; i++) {
+ 46e:	51 f7       	brne	.-44     	; 0x444 <__LOCK_REGION_LENGTH__+0x44>
+			ADCSRA |= (1 << ADIF); // Clear the ADC interrupt flag
+			volatile uint16_t adcl = ADCL; // Read lower byte
+			adcsum += (((uint16_t)ADCH) << 8) | adcl; // Read upper byte and merge into uint16_t
+			_delay_ms(1);
+		}
+		showVccVoltage(adcsum / 100);
+ 470:	ca 01       	movw	r24, r20
+ 472:	b8 01       	movw	r22, r16
+ 474:	df d0       	rcall	.+446    	; 0x634 <__udivmodhi4>
+ 476:	cb 01       	movw	r24, r22
+ 478:	fa de       	rcall	.-524    	; 0x26e <showVccVoltage>
+ 47a:	fa 94       	dec	r15
+	setMAXRegister(0x0B, 3);	// Scan Limit -> 0,1,2,3
+	_delay_ms(200);
+
+	ds18b20wsp(&PORTB, &DDRB, &PINB, ( 1 << 2 ), 0, 0, 125, DS18B20_RES11);
+	
+	for(uint8_t j = 0; j < 30; j++) {
+ 47c:	f1 10       	cpse	r15, r1
+ 47e:	df cf       	rjmp	.-66     	; 0x43e <__LOCK_REGION_LENGTH__+0x3e>
+			_delay_ms(1);
+		}
+		showVccVoltage(adcsum / 100);
+	}
+	
 	int16_t temp = 0;
- 5c8:	1a 82       	std	Y+2, r1	; 0x02
- 5ca:	19 82       	std	Y+1, r1	; 0x01
+ 480:	1a 82       	std	Y+2, r1	; 0x02
+ 482:	19 82       	std	Y+1, r1	; 0x01
 	while (1) {
 		ds18b20convert(&PORTB, &DDRB, &PINB, ( 1 << 2 ), 0);
- 5cc:	00 e0       	ldi	r16, 0x00	; 0
- 5ce:	10 e0       	ldi	r17, 0x00	; 0
- 5d0:	24 e0       	ldi	r18, 0x04	; 4
- 5d2:	46 e3       	ldi	r20, 0x36	; 54
- 5d4:	50 e0       	ldi	r21, 0x00	; 0
- 5d6:	67 e3       	ldi	r22, 0x37	; 55
- 5d8:	70 e0       	ldi	r23, 0x00	; 0
- 5da:	88 e3       	ldi	r24, 0x38	; 56
- 5dc:	90 e0       	ldi	r25, 0x00	; 0
- 5de:	41 dd       	rcall	.-1406   	; 0x62 <ds18b20convert>
- 5e0:	83 ec       	ldi	r24, 0xC3	; 195
- 5e2:	99 e0       	ldi	r25, 0x09	; 9
- 5e4:	01 97       	sbiw	r24, 0x01	; 1
- 5e6:	f1 f7       	brne	.-4      	; 0x5e4 <main+0x130>
- 5e8:	00 c0       	rjmp	.+0      	; 0x5ea <main+0x136>
- 5ea:	00 00       	nop
+ 484:	00 e0       	ldi	r16, 0x00	; 0
+ 486:	10 e0       	ldi	r17, 0x00	; 0
+ 488:	24 e0       	ldi	r18, 0x04	; 4
+ 48a:	46 e3       	ldi	r20, 0x36	; 54
+ 48c:	50 e0       	ldi	r21, 0x00	; 0
+ 48e:	67 e3       	ldi	r22, 0x37	; 55
+ 490:	70 e0       	ldi	r23, 0x00	; 0
+ 492:	88 e3       	ldi	r24, 0x38	; 56
+ 494:	90 e0       	ldi	r25, 0x00	; 0
+ 496:	cc dd       	rcall	.-1128   	; 0x30 <ds18b20convert>
+ 498:	83 ec       	ldi	r24, 0xC3	; 195
+ 49a:	99 e0       	ldi	r25, 0x09	; 9
+ 49c:	01 97       	sbiw	r24, 0x01	; 1
+ 49e:	f1 f7       	brne	.-4      	; 0x49c <__LOCK_REGION_LENGTH__+0x9c>
+ 4a0:	00 c0       	rjmp	.+0      	; 0x4a2 <__LOCK_REGION_LENGTH__+0xa2>
+ 4a2:	00 00       	nop
 		_delay_ms(10);
 		ds18b20read(&PORTB, &DDRB, &PINB, ( 1 << 2 ), 0, &temp);
- 5ec:	ce 01       	movw	r24, r28
- 5ee:	01 96       	adiw	r24, 0x01	; 1
- 5f0:	7c 01       	movw	r14, r24
- 5f2:	24 e0       	ldi	r18, 0x04	; 4
- 5f4:	46 e3       	ldi	r20, 0x36	; 54
- 5f6:	50 e0       	ldi	r21, 0x00	; 0
- 5f8:	67 e3       	ldi	r22, 0x37	; 55
- 5fa:	70 e0       	ldi	r23, 0x00	; 0
- 5fc:	88 e3       	ldi	r24, 0x38	; 56
- 5fe:	90 e0       	ldi	r25, 0x00	; 0
- 600:	ea dd       	rcall	.-1068   	; 0x1d6 <ds18b20read>
+ 4a4:	fe 01       	movw	r30, r28
+ 4a6:	31 96       	adiw	r30, 0x01	; 1
+ 4a8:	7f 01       	movw	r14, r30
+ 4aa:	24 e0       	ldi	r18, 0x04	; 4
+ 4ac:	46 e3       	ldi	r20, 0x36	; 54
+ 4ae:	50 e0       	ldi	r21, 0x00	; 0
+ 4b0:	67 e3       	ldi	r22, 0x37	; 55
+ 4b2:	70 e0       	ldi	r23, 0x00	; 0
+ 4b4:	88 e3       	ldi	r24, 0x38	; 56
+ 4b6:	90 e0       	ldi	r25, 0x00	; 0
+ 4b8:	89 de       	rcall	.-750    	; 0x1cc <ds18b20read>
 		setMAXfromDS(temp);
- 602:	89 81       	ldd	r24, Y+1	; 0x01
- 604:	9a 81       	ldd	r25, Y+2	; 0x02
- 606:	bb de       	rcall	.-650    	; 0x37e <setMAXfromDS>
- 608:	e1 cf       	rjmp	.-62     	; 0x5cc <main+0x118>
+ 4ba:	89 81       	ldd	r24, Y+1	; 0x01
+ 4bc:	9a 81       	ldd	r25, Y+2	; 0x02
+ 4be:	fc de       	rcall	.-520    	; 0x2b8 <setMAXfromDS>
+ 4c0:	e1 cf       	rjmp	.-62     	; 0x484 <__LOCK_REGION_LENGTH__+0x84>
 
-0000060a <onewireInit>:
-#include <inttypes.h>
-#include "onewire.h"
-
-//! Initializes 1wire bus before transmission
-uint8_t onewireInit( volatile uint8_t *port, volatile uint8_t *direction, volatile uint8_t *portin, uint8_t mask )
-{
- 60a:	cf 93       	push	r28
- 60c:	df 93       	push	r29
- 60e:	dc 01       	movw	r26, r24
- 610:	fb 01       	movw	r30, r22
-	uint8_t response = 0;
-	uint8_t sreg = SREG; //Store status register
- 612:	3f b7       	in	r19, 0x3f	; 63
-
-	#ifdef ONEWIRE_AUTO_CLI
-		cli( );
-	#endif
-
-	*port |= mask; //Write 1 to output
- 614:	8c 91       	ld	r24, X
- 616:	82 2b       	or	r24, r18
- 618:	8c 93       	st	X, r24
-	*direction |= mask; //Set port to output
- 61a:	80 81       	ld	r24, Z
- 61c:	82 2b       	or	r24, r18
- 61e:	80 83       	st	Z, r24
-	*port &= ~mask; //Write 0 to output
- 620:	9c 91       	ld	r25, X
- 622:	82 2f       	mov	r24, r18
- 624:	80 95       	com	r24
- 626:	98 23       	and	r25, r24
- 628:	9c 93       	st	X, r25
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 62a:	98 ec       	ldi	r25, 0xC8	; 200
- 62c:	9a 95       	dec	r25
- 62e:	f1 f7       	brne	.-4      	; 0x62c <onewireInit+0x22>
-
-	_delay_us( 600 );
-
-	*direction &= ~mask; //Set port to input
- 630:	90 81       	ld	r25, Z
- 632:	89 23       	and	r24, r25
- 634:	80 83       	st	Z, r24
- 636:	c7 e1       	ldi	r28, 0x17	; 23
- 638:	ca 95       	dec	r28
- 63a:	f1 f7       	brne	.-4      	; 0x638 <onewireInit+0x2e>
- 63c:	00 00       	nop
-
-	_delay_us( 70 );
-
-	response = *portin & mask; //Read input
- 63e:	ea 01       	movw	r28, r20
- 640:	98 81       	ld	r25, Y
- 642:	92 23       	and	r25, r18
- 644:	d2 e4       	ldi	r29, 0x42	; 66
- 646:	da 95       	dec	r29
- 648:	f1 f7       	brne	.-4      	; 0x646 <onewireInit+0x3c>
- 64a:	00 c0       	rjmp	.+0      	; 0x64c <onewireInit+0x42>
-
-	_delay_us( 200 );
-
-	*port |= mask; //Write 1 to output
- 64c:	8c 91       	ld	r24, X
- 64e:	82 2b       	or	r24, r18
- 650:	8c 93       	st	X, r24
-	*direction |= mask; //Set port to output
- 652:	80 81       	ld	r24, Z
- 654:	28 2b       	or	r18, r24
- 656:	20 83       	st	Z, r18
- 658:	88 ec       	ldi	r24, 0xC8	; 200
- 65a:	8a 95       	dec	r24
- 65c:	f1 f7       	brne	.-4      	; 0x65a <onewireInit+0x50>
-
-	_delay_us( 600 );
-
-	SREG = sreg; //Restore status register
- 65e:	3f bf       	out	0x3f, r19	; 63
-
-	return response != 0 ? ONEWIRE_ERROR_COMM : ONEWIRE_ERROR_OK;
- 660:	81 e0       	ldi	r24, 0x01	; 1
- 662:	91 11       	cpse	r25, r1
- 664:	01 c0       	rjmp	.+2      	; 0x668 <onewireInit+0x5e>
- 666:	80 e0       	ldi	r24, 0x00	; 0
-}
- 668:	df 91       	pop	r29
- 66a:	cf 91       	pop	r28
- 66c:	08 95       	ret
-
-0000066e <onewireWriteBit>:
-
-//! Sends a single bit over the 1wire bus
-uint8_t onewireWriteBit( volatile uint8_t *port, volatile uint8_t *direction, volatile uint8_t *portin, uint8_t mask, uint8_t bit )
-{
- 66e:	0f 93       	push	r16
- 670:	fc 01       	movw	r30, r24
-	uint8_t sreg = SREG;
- 672:	9f b7       	in	r25, 0x3f	; 63
-
-	#ifdef ONEWIRE_AUTO_CLI
-		cli( );
-	#endif
-
-	*port |= mask; //Write 1 to output
- 674:	80 81       	ld	r24, Z
- 676:	82 2b       	or	r24, r18
- 678:	80 83       	st	Z, r24
-	*direction |= mask;
- 67a:	db 01       	movw	r26, r22
- 67c:	8c 91       	ld	r24, X
- 67e:	82 2b       	or	r24, r18
- 680:	8c 93       	st	X, r24
-	*port &= ~mask; //Write 0 to output
- 682:	80 81       	ld	r24, Z
- 684:	32 2f       	mov	r19, r18
- 686:	30 95       	com	r19
- 688:	83 23       	and	r24, r19
- 68a:	80 83       	st	Z, r24
-
-	if ( bit != 0 ) _delay_us( 8 );
- 68c:	00 23       	and	r16, r16
- 68e:	29 f0       	breq	.+10     	; 0x69a <onewireWriteBit+0x2c>
- 690:	b2 e0       	ldi	r27, 0x02	; 2
- 692:	ba 95       	dec	r27
- 694:	f1 f7       	brne	.-4      	; 0x692 <onewireWriteBit+0x24>
- 696:	00 c0       	rjmp	.+0      	; 0x698 <onewireWriteBit+0x2a>
- 698:	04 c0       	rjmp	.+8      	; 0x6a2 <onewireWriteBit+0x34>
- 69a:	8a e1       	ldi	r24, 0x1A	; 26
- 69c:	8a 95       	dec	r24
- 69e:	f1 f7       	brne	.-4      	; 0x69c <onewireWriteBit+0x2e>
- 6a0:	00 c0       	rjmp	.+0      	; 0x6a2 <onewireWriteBit+0x34>
-	else _delay_us( 80 );
-
-	*port |= mask;
- 6a2:	80 81       	ld	r24, Z
- 6a4:	28 2b       	or	r18, r24
- 6a6:	20 83       	st	Z, r18
-
-	if ( bit != 0 ) _delay_us( 80 );
- 6a8:	00 23       	and	r16, r16
- 6aa:	29 f0       	breq	.+10     	; 0x6b6 <onewireWriteBit+0x48>
- 6ac:	aa e1       	ldi	r26, 0x1A	; 26
- 6ae:	aa 95       	dec	r26
- 6b0:	f1 f7       	brne	.-4      	; 0x6ae <onewireWriteBit+0x40>
- 6b2:	00 c0       	rjmp	.+0      	; 0x6b4 <onewireWriteBit+0x46>
- 6b4:	01 c0       	rjmp	.+2      	; 0x6b8 <onewireWriteBit+0x4a>
- 6b6:	00 c0       	rjmp	.+0      	; 0x6b8 <onewireWriteBit+0x4a>
-	else _delay_us( 2 );
-
-	SREG = sreg;
- 6b8:	9f bf       	out	0x3f, r25	; 63
-
-	return bit != 0;
- 6ba:	81 e0       	ldi	r24, 0x01	; 1
- 6bc:	01 11       	cpse	r16, r1
- 6be:	01 c0       	rjmp	.+2      	; 0x6c2 <onewireWriteBit+0x54>
- 6c0:	80 e0       	ldi	r24, 0x00	; 0
-}
- 6c2:	0f 91       	pop	r16
- 6c4:	08 95       	ret
-
-000006c6 <onewireWrite>:
-
-//! Transmits a byte over 1wire bus
-void onewireWrite( volatile uint8_t *port, volatile uint8_t *direction, volatile uint8_t *portin, uint8_t mask, uint8_t data )
-{
- 6c6:	9f 92       	push	r9
- 6c8:	af 92       	push	r10
- 6ca:	bf 92       	push	r11
- 6cc:	cf 92       	push	r12
- 6ce:	df 92       	push	r13
- 6d0:	ef 92       	push	r14
- 6d2:	ff 92       	push	r15
- 6d4:	0f 93       	push	r16
- 6d6:	1f 93       	push	r17
- 6d8:	cf 93       	push	r28
- 6da:	df 93       	push	r29
- 6dc:	5c 01       	movw	r10, r24
- 6de:	6b 01       	movw	r12, r22
- 6e0:	7a 01       	movw	r14, r20
- 6e2:	12 2f       	mov	r17, r18
- 6e4:	d0 2f       	mov	r29, r16
-	uint8_t sreg = SREG; //Store status register
- 6e6:	9f b6       	in	r9, 0x3f	; 63
-
-	#ifdef ONEWIRE_AUTO_CLI
-		cli( );
-	#endif
-
-	for ( i = 1; i != 0; i <<= 1 ) //Write byte in 8 single bit writes
- 6e8:	c1 e0       	ldi	r28, 0x01	; 1
- 6ea:	08 c0       	rjmp	.+16     	; 0x6fc <onewireWrite+0x36>
-		onewireWriteBit( port, direction, portin, mask, data & i );
- 6ec:	0c 2f       	mov	r16, r28
- 6ee:	0d 23       	and	r16, r29
- 6f0:	21 2f       	mov	r18, r17
- 6f2:	a7 01       	movw	r20, r14
- 6f4:	b6 01       	movw	r22, r12
- 6f6:	c5 01       	movw	r24, r10
- 6f8:	ba df       	rcall	.-140    	; 0x66e <onewireWriteBit>
-
-	#ifdef ONEWIRE_AUTO_CLI
-		cli( );
-	#endif
-
-	for ( i = 1; i != 0; i <<= 1 ) //Write byte in 8 single bit writes
- 6fa:	cc 0f       	add	r28, r28
- 6fc:	c1 11       	cpse	r28, r1
- 6fe:	f6 cf       	rjmp	.-20     	; 0x6ec <onewireWrite+0x26>
-		onewireWriteBit( port, direction, portin, mask, data & i );
-
-	SREG = sreg;
- 700:	9f be       	out	0x3f, r9	; 63
-}
- 702:	df 91       	pop	r29
- 704:	cf 91       	pop	r28
- 706:	1f 91       	pop	r17
- 708:	0f 91       	pop	r16
- 70a:	ff 90       	pop	r15
- 70c:	ef 90       	pop	r14
- 70e:	df 90       	pop	r13
- 710:	cf 90       	pop	r12
- 712:	bf 90       	pop	r11
- 714:	af 90       	pop	r10
- 716:	9f 90       	pop	r9
- 718:	08 95       	ret
-
-0000071a <onewireReadBit>:
-
-//! Reads a bit from the 1wire bus
-uint8_t onewireReadBit( volatile uint8_t *port, volatile uint8_t *direction, volatile uint8_t *portin, uint8_t mask )
-{
- 71a:	dc 01       	movw	r26, r24
- 71c:	fb 01       	movw	r30, r22
-	uint8_t bit = 0;
-	uint8_t sreg = SREG;
- 71e:	3f b7       	in	r19, 0x3f	; 63
-
-	#ifdef ONEWIRE_AUTO_CLI
-		cli( );
-	#endif
-
-	*port |= mask; //Write 1 to output
- 720:	8c 91       	ld	r24, X
- 722:	82 2b       	or	r24, r18
- 724:	8c 93       	st	X, r24
-	*direction |= mask;
- 726:	80 81       	ld	r24, Z
- 728:	82 2b       	or	r24, r18
- 72a:	80 83       	st	Z, r24
-	*port &= ~mask; //Write 0 to output
- 72c:	8c 91       	ld	r24, X
- 72e:	92 2f       	mov	r25, r18
- 730:	90 95       	com	r25
- 732:	89 23       	and	r24, r25
- 734:	8c 93       	st	X, r24
- 736:	00 c0       	rjmp	.+0      	; 0x738 <onewireReadBit+0x1e>
-	_delay_us( 2 );
-	*direction &= ~mask; //Set port to input
- 738:	80 81       	ld	r24, Z
- 73a:	98 23       	and	r25, r24
- 73c:	90 83       	st	Z, r25
- 73e:	00 c0       	rjmp	.+0      	; 0x740 <onewireReadBit+0x26>
- 740:	00 c0       	rjmp	.+0      	; 0x742 <onewireReadBit+0x28>
- 742:	00 00       	nop
-	_delay_us( 5 );
+000004c2 <onewireInit>:
 	bit = ( ( *portin & mask ) != 0 ); //Read input
- 744:	fa 01       	movw	r30, r20
- 746:	80 81       	ld	r24, Z
- 748:	28 23       	and	r18, r24
- 74a:	81 e0       	ldi	r24, 0x01	; 1
- 74c:	09 f4       	brne	.+2      	; 0x750 <onewireReadBit+0x36>
- 74e:	80 e0       	ldi	r24, 0x00	; 0
- 750:	f4 e1       	ldi	r31, 0x14	; 20
- 752:	fa 95       	dec	r31
- 754:	f1 f7       	brne	.-4      	; 0x752 <onewireReadBit+0x38>
 	_delay_us( 60 );
 	SREG = sreg;
- 756:	3f bf       	out	0x3f, r19	; 63
 
 	return bit;
 }
- 758:	08 95       	ret
+ 4c2:	cf 93       	push	r28
+ 4c4:	df 93       	push	r29
+ 4c6:	dc 01       	movw	r26, r24
+ 4c8:	fb 01       	movw	r30, r22
+ 4ca:	3f b7       	in	r19, 0x3f	; 63
+ 4cc:	8c 91       	ld	r24, X
+ 4ce:	82 2b       	or	r24, r18
+ 4d0:	8c 93       	st	X, r24
+ 4d2:	80 81       	ld	r24, Z
+ 4d4:	82 2b       	or	r24, r18
+ 4d6:	80 83       	st	Z, r24
+ 4d8:	9c 91       	ld	r25, X
+ 4da:	82 2f       	mov	r24, r18
+ 4dc:	80 95       	com	r24
+ 4de:	98 23       	and	r25, r24
+ 4e0:	9c 93       	st	X, r25
+ 4e2:	98 ec       	ldi	r25, 0xC8	; 200
+ 4e4:	9a 95       	dec	r25
+ 4e6:	f1 f7       	brne	.-4      	; 0x4e4 <onewireInit+0x22>
+ 4e8:	90 81       	ld	r25, Z
+ 4ea:	89 23       	and	r24, r25
+ 4ec:	80 83       	st	Z, r24
+ 4ee:	c7 e1       	ldi	r28, 0x17	; 23
+ 4f0:	ca 95       	dec	r28
+ 4f2:	f1 f7       	brne	.-4      	; 0x4f0 <onewireInit+0x2e>
+ 4f4:	00 00       	nop
+ 4f6:	ea 01       	movw	r28, r20
+ 4f8:	88 81       	ld	r24, Y
+ 4fa:	d2 e4       	ldi	r29, 0x42	; 66
+ 4fc:	da 95       	dec	r29
+ 4fe:	f1 f7       	brne	.-4      	; 0x4fc <onewireInit+0x3a>
+ 500:	00 c0       	rjmp	.+0      	; 0x502 <onewireInit+0x40>
+ 502:	9c 91       	ld	r25, X
+ 504:	92 2b       	or	r25, r18
+ 506:	9c 93       	st	X, r25
+ 508:	90 81       	ld	r25, Z
+ 50a:	92 2b       	or	r25, r18
+ 50c:	90 83       	st	Z, r25
+ 50e:	98 ec       	ldi	r25, 0xC8	; 200
+ 510:	9a 95       	dec	r25
+ 512:	f1 f7       	brne	.-4      	; 0x510 <onewireInit+0x4e>
+ 514:	3f bf       	out	0x3f, r19	; 63
+ 516:	28 23       	and	r18, r24
+ 518:	81 e0       	ldi	r24, 0x01	; 1
+ 51a:	09 f4       	brne	.+2      	; 0x51e <onewireInit+0x5c>
+ 51c:	80 e0       	ldi	r24, 0x00	; 0
+ 51e:	df 91       	pop	r29
+ 520:	cf 91       	pop	r28
+ 522:	08 95       	ret
 
-0000075a <onewireRead>:
+00000524 <onewireWrite>:
+ 524:	0f 93       	push	r16
+ 526:	fc 01       	movw	r30, r24
+ 528:	db 01       	movw	r26, r22
+ 52a:	7f b7       	in	r23, 0x3f	; 63
+ 52c:	62 2f       	mov	r22, r18
+ 52e:	60 95       	com	r22
+ 530:	48 e0       	ldi	r20, 0x08	; 8
+ 532:	50 e0       	ldi	r21, 0x00	; 0
+ 534:	91 e0       	ldi	r25, 0x01	; 1
+ 536:	10 c0       	rjmp	.+32     	; 0x558 <onewireWrite+0x34>
+ 538:	82 e0       	ldi	r24, 0x02	; 2
+ 53a:	8a 95       	dec	r24
+ 53c:	f1 f7       	brne	.-4      	; 0x53a <onewireWrite+0x16>
+ 53e:	00 c0       	rjmp	.+0      	; 0x540 <onewireWrite+0x1c>
+ 540:	80 81       	ld	r24, Z
+ 542:	82 2b       	or	r24, r18
+ 544:	80 83       	st	Z, r24
+ 546:	8a e1       	ldi	r24, 0x1A	; 26
+ 548:	8a 95       	dec	r24
+ 54a:	f1 f7       	brne	.-4      	; 0x548 <onewireWrite+0x24>
+ 54c:	00 c0       	rjmp	.+0      	; 0x54e <onewireWrite+0x2a>
+ 54e:	3f bf       	out	0x3f, r19	; 63
+ 550:	99 0f       	add	r25, r25
+ 552:	41 50       	subi	r20, 0x01	; 1
+ 554:	51 09       	sbc	r21, r1
+ 556:	d1 f0       	breq	.+52     	; 0x58c <onewireWrite+0x68>
+ 558:	3f b7       	in	r19, 0x3f	; 63
+ 55a:	80 81       	ld	r24, Z
+ 55c:	82 2b       	or	r24, r18
+ 55e:	80 83       	st	Z, r24
+ 560:	8c 91       	ld	r24, X
+ 562:	82 2b       	or	r24, r18
+ 564:	8c 93       	st	X, r24
+ 566:	80 81       	ld	r24, Z
+ 568:	86 23       	and	r24, r22
+ 56a:	80 83       	st	Z, r24
+ 56c:	80 2f       	mov	r24, r16
+ 56e:	89 23       	and	r24, r25
+ 570:	19 f7       	brne	.-58     	; 0x538 <onewireWrite+0x14>
+ 572:	8a e1       	ldi	r24, 0x1A	; 26
+ 574:	8a 95       	dec	r24
+ 576:	f1 f7       	brne	.-4      	; 0x574 <onewireWrite+0x50>
+ 578:	00 c0       	rjmp	.+0      	; 0x57a <onewireWrite+0x56>
+ 57a:	80 81       	ld	r24, Z
+ 57c:	82 2b       	or	r24, r18
+ 57e:	80 83       	st	Z, r24
+ 580:	00 c0       	rjmp	.+0      	; 0x582 <onewireWrite+0x5e>
+ 582:	3f bf       	out	0x3f, r19	; 63
+ 584:	99 0f       	add	r25, r25
+ 586:	41 50       	subi	r20, 0x01	; 1
+ 588:	51 09       	sbc	r21, r1
+ 58a:	31 f7       	brne	.-52     	; 0x558 <onewireWrite+0x34>
+ 58c:	7f bf       	out	0x3f, r23	; 63
+ 58e:	0f 91       	pop	r16
+ 590:	08 95       	ret
+
+00000592 <onewireRead>:
 
 //! Reads a byte from the 1wire bus
 uint8_t onewireRead( volatile uint8_t *port, volatile uint8_t *direction, volatile uint8_t *portin, uint8_t mask )
 {
- 75a:	af 92       	push	r10
- 75c:	bf 92       	push	r11
- 75e:	cf 92       	push	r12
- 760:	df 92       	push	r13
- 762:	ef 92       	push	r14
- 764:	ff 92       	push	r15
- 766:	0f 93       	push	r16
- 768:	1f 93       	push	r17
- 76a:	cf 93       	push	r28
- 76c:	df 93       	push	r29
- 76e:	6c 01       	movw	r12, r24
- 770:	7b 01       	movw	r14, r22
- 772:	8a 01       	movw	r16, r20
- 774:	b2 2e       	mov	r11, r18
+ 592:	df 92       	push	r13
+ 594:	ef 92       	push	r14
+ 596:	ff 92       	push	r15
+ 598:	0f 93       	push	r16
+ 59a:	1f 93       	push	r17
+ 59c:	cf 93       	push	r28
+ 59e:	df 93       	push	r29
+ 5a0:	dc 01       	movw	r26, r24
+ 5a2:	fb 01       	movw	r30, r22
+ 5a4:	ea 01       	movw	r28, r20
 	uint8_t sreg = SREG; //Store status register
- 776:	af b6       	in	r10, 0x3f	; 63
+ 5a6:	df b6       	in	r13, 0x3f	; 63
+ 5a8:	e2 2e       	mov	r14, r18
+ 5aa:	e0 94       	com	r14
+ 5ac:	08 e0       	ldi	r16, 0x08	; 8
+ 5ae:	10 e0       	ldi	r17, 0x00	; 0
 
 	#ifdef ONEWIRE_AUTO_CLI
 		cli( );
 	#endif
 
 	for ( i = 1; i != 0; i <<= 1 ) //Read byte in 8 single bit reads
- 778:	c1 e0       	ldi	r28, 0x01	; 1
+ 5b0:	31 e0       	ldi	r19, 0x01	; 1
 
 //! Reads a byte from the 1wire bus
 uint8_t onewireRead( volatile uint8_t *port, volatile uint8_t *direction, volatile uint8_t *portin, uint8_t mask )
 {
 	uint8_t sreg = SREG; //Store status register
 	uint8_t data = 0;
- 77a:	d0 e0       	ldi	r29, 0x00	; 0
+ 5b2:	f1 2c       	mov	r15, r1
+
+//! Reads a bit from the 1wire bus
+uint8_t onewireReadBit( volatile uint8_t *port, volatile uint8_t *direction, volatile uint8_t *portin, uint8_t mask )
+{
+	uint8_t bit = 0;
+	uint8_t sreg = SREG;
+ 5b4:	4f b7       	in	r20, 0x3f	; 63
 
 	#ifdef ONEWIRE_AUTO_CLI
 		cli( );
 	#endif
 
+	*port |= mask; //Write 1 to output
+ 5b6:	8c 91       	ld	r24, X
+ 5b8:	82 2b       	or	r24, r18
+ 5ba:	8c 93       	st	X, r24
+	*direction |= mask;
+ 5bc:	80 81       	ld	r24, Z
+ 5be:	82 2b       	or	r24, r18
+ 5c0:	80 83       	st	Z, r24
+	*port &= ~mask; //Write 0 to output
+ 5c2:	8c 91       	ld	r24, X
+ 5c4:	8e 21       	and	r24, r14
+ 5c6:	8c 93       	st	X, r24
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 5c8:	00 c0       	rjmp	.+0      	; 0x5ca <onewireRead+0x38>
+	_delay_us( 2 );
+	*direction &= ~mask; //Set port to input
+ 5ca:	80 81       	ld	r24, Z
+ 5cc:	8e 21       	and	r24, r14
+ 5ce:	80 83       	st	Z, r24
+ 5d0:	00 c0       	rjmp	.+0      	; 0x5d2 <onewireRead+0x40>
+ 5d2:	00 c0       	rjmp	.+0      	; 0x5d4 <onewireRead+0x42>
+ 5d4:	00 00       	nop
+	_delay_us( 5 );
+	bit = ( ( *portin & mask ) != 0 ); //Read input
+ 5d6:	98 81       	ld	r25, Y
+ 5d8:	84 e1       	ldi	r24, 0x14	; 20
+ 5da:	8a 95       	dec	r24
+ 5dc:	f1 f7       	brne	.-4      	; 0x5da <onewireRead+0x48>
+	_delay_us( 60 );
+	SREG = sreg;
+ 5de:	4f bf       	out	0x3f, r20	; 63
+	#ifdef ONEWIRE_AUTO_CLI
+		cli( );
+	#endif
+
 	for ( i = 1; i != 0; i <<= 1 ) //Read byte in 8 single bit reads
- 77c:	0b c0       	rjmp	.+22     	; 0x794 <onewireRead+0x3a>
 		data |= onewireReadBit( port, direction, portin, mask ) * i;
- 77e:	2b 2d       	mov	r18, r11
- 780:	a8 01       	movw	r20, r16
- 782:	b7 01       	movw	r22, r14
- 784:	c6 01       	movw	r24, r12
- 786:	c9 df       	rcall	.-110    	; 0x71a <onewireReadBit>
- 788:	6c 2f       	mov	r22, r28
- 78a:	70 e0       	ldi	r23, 0x00	; 0
- 78c:	90 e0       	ldi	r25, 0x00	; 0
- 78e:	11 d0       	rcall	.+34     	; 0x7b2 <__mulhi3>
- 790:	d8 2b       	or	r29, r24
+ 5e0:	42 2f       	mov	r20, r18
+ 5e2:	49 23       	and	r20, r25
+ 5e4:	81 e0       	ldi	r24, 0x01	; 1
+ 5e6:	90 e0       	ldi	r25, 0x00	; 0
+ 5e8:	11 f4       	brne	.+4      	; 0x5ee <onewireRead+0x5c>
+ 5ea:	80 e0       	ldi	r24, 0x00	; 0
+ 5ec:	90 e0       	ldi	r25, 0x00	; 0
+ 5ee:	63 2f       	mov	r22, r19
+ 5f0:	70 e0       	ldi	r23, 0x00	; 0
+ 5f2:	0f d0       	rcall	.+30     	; 0x612 <__mulhi3>
+ 5f4:	f8 2a       	or	r15, r24
 
 	#ifdef ONEWIRE_AUTO_CLI
 		cli( );
 	#endif
 
 	for ( i = 1; i != 0; i <<= 1 ) //Read byte in 8 single bit reads
- 792:	cc 0f       	add	r28, r28
- 794:	c1 11       	cpse	r28, r1
- 796:	f3 cf       	rjmp	.-26     	; 0x77e <onewireRead+0x24>
+ 5f6:	33 0f       	add	r19, r19
+ 5f8:	01 50       	subi	r16, 0x01	; 1
+ 5fa:	11 09       	sbc	r17, r1
+ 5fc:	d9 f6       	brne	.-74     	; 0x5b4 <onewireRead+0x22>
 		data |= onewireReadBit( port, direction, portin, mask ) * i;
 
 	SREG = sreg;
- 798:	af be       	out	0x3f, r10	; 63
+ 5fe:	df be       	out	0x3f, r13	; 63
 
 	return data;
 }
- 79a:	8d 2f       	mov	r24, r29
- 79c:	df 91       	pop	r29
- 79e:	cf 91       	pop	r28
- 7a0:	1f 91       	pop	r17
- 7a2:	0f 91       	pop	r16
- 7a4:	ff 90       	pop	r15
- 7a6:	ef 90       	pop	r14
- 7a8:	df 90       	pop	r13
- 7aa:	cf 90       	pop	r12
- 7ac:	bf 90       	pop	r11
- 7ae:	af 90       	pop	r10
- 7b0:	08 95       	ret
+ 600:	8f 2d       	mov	r24, r15
+ 602:	df 91       	pop	r29
+ 604:	cf 91       	pop	r28
+ 606:	1f 91       	pop	r17
+ 608:	0f 91       	pop	r16
+ 60a:	ff 90       	pop	r15
+ 60c:	ef 90       	pop	r14
+ 60e:	df 90       	pop	r13
+ 610:	08 95       	ret
 
-000007b2 <__mulhi3>:
- 7b2:	00 24       	eor	r0, r0
- 7b4:	55 27       	eor	r21, r21
- 7b6:	04 c0       	rjmp	.+8      	; 0x7c0 <__mulhi3+0xe>
- 7b8:	08 0e       	add	r0, r24
- 7ba:	59 1f       	adc	r21, r25
- 7bc:	88 0f       	add	r24, r24
- 7be:	99 1f       	adc	r25, r25
- 7c0:	00 97       	sbiw	r24, 0x00	; 0
- 7c2:	29 f0       	breq	.+10     	; 0x7ce <__mulhi3+0x1c>
- 7c4:	76 95       	lsr	r23
- 7c6:	67 95       	ror	r22
- 7c8:	b8 f3       	brcs	.-18     	; 0x7b8 <__mulhi3+0x6>
- 7ca:	71 05       	cpc	r23, r1
- 7cc:	b9 f7       	brne	.-18     	; 0x7bc <__mulhi3+0xa>
- 7ce:	80 2d       	mov	r24, r0
- 7d0:	95 2f       	mov	r25, r21
- 7d2:	08 95       	ret
+00000612 <__mulhi3>:
+ 612:	00 24       	eor	r0, r0
+ 614:	55 27       	eor	r21, r21
+ 616:	04 c0       	rjmp	.+8      	; 0x620 <__mulhi3+0xe>
+ 618:	08 0e       	add	r0, r24
+ 61a:	59 1f       	adc	r21, r25
+ 61c:	88 0f       	add	r24, r24
+ 61e:	99 1f       	adc	r25, r25
+ 620:	00 97       	sbiw	r24, 0x00	; 0
+ 622:	29 f0       	breq	.+10     	; 0x62e <__mulhi3+0x1c>
+ 624:	76 95       	lsr	r23
+ 626:	67 95       	ror	r22
+ 628:	b8 f3       	brcs	.-18     	; 0x618 <__mulhi3+0x6>
+ 62a:	71 05       	cpc	r23, r1
+ 62c:	b9 f7       	brne	.-18     	; 0x61c <__mulhi3+0xa>
+ 62e:	80 2d       	mov	r24, r0
+ 630:	95 2f       	mov	r25, r21
+ 632:	08 95       	ret
 
-000007d4 <__udivmodhi4>:
- 7d4:	aa 1b       	sub	r26, r26
- 7d6:	bb 1b       	sub	r27, r27
- 7d8:	51 e1       	ldi	r21, 0x11	; 17
- 7da:	07 c0       	rjmp	.+14     	; 0x7ea <__udivmodhi4_ep>
+00000634 <__udivmodhi4>:
+ 634:	aa 1b       	sub	r26, r26
+ 636:	bb 1b       	sub	r27, r27
+ 638:	51 e1       	ldi	r21, 0x11	; 17
+ 63a:	07 c0       	rjmp	.+14     	; 0x64a <__udivmodhi4_ep>
 
-000007dc <__udivmodhi4_loop>:
- 7dc:	aa 1f       	adc	r26, r26
- 7de:	bb 1f       	adc	r27, r27
- 7e0:	a6 17       	cp	r26, r22
- 7e2:	b7 07       	cpc	r27, r23
- 7e4:	10 f0       	brcs	.+4      	; 0x7ea <__udivmodhi4_ep>
- 7e6:	a6 1b       	sub	r26, r22
- 7e8:	b7 0b       	sbc	r27, r23
+0000063c <__udivmodhi4_loop>:
+ 63c:	aa 1f       	adc	r26, r26
+ 63e:	bb 1f       	adc	r27, r27
+ 640:	a6 17       	cp	r26, r22
+ 642:	b7 07       	cpc	r27, r23
+ 644:	10 f0       	brcs	.+4      	; 0x64a <__udivmodhi4_ep>
+ 646:	a6 1b       	sub	r26, r22
+ 648:	b7 0b       	sbc	r27, r23
 
-000007ea <__udivmodhi4_ep>:
- 7ea:	88 1f       	adc	r24, r24
- 7ec:	99 1f       	adc	r25, r25
- 7ee:	5a 95       	dec	r21
- 7f0:	a9 f7       	brne	.-22     	; 0x7dc <__udivmodhi4_loop>
- 7f2:	80 95       	com	r24
- 7f4:	90 95       	com	r25
- 7f6:	bc 01       	movw	r22, r24
- 7f8:	cd 01       	movw	r24, r26
- 7fa:	08 95       	ret
+0000064a <__udivmodhi4_ep>:
+ 64a:	88 1f       	adc	r24, r24
+ 64c:	99 1f       	adc	r25, r25
+ 64e:	5a 95       	dec	r21
+ 650:	a9 f7       	brne	.-22     	; 0x63c <__udivmodhi4_loop>
+ 652:	80 95       	com	r24
+ 654:	90 95       	com	r25
+ 656:	bc 01       	movw	r22, r24
+ 658:	cd 01       	movw	r24, r26
+ 65a:	08 95       	ret
 
-000007fc <_exit>:
- 7fc:	f8 94       	cli
+0000065c <__divmodsi4>:
+ 65c:	05 2e       	mov	r0, r21
+ 65e:	97 fb       	bst	r25, 7
+ 660:	16 f4       	brtc	.+4      	; 0x666 <__divmodsi4+0xa>
+ 662:	00 94       	com	r0
+ 664:	0f d0       	rcall	.+30     	; 0x684 <__negsi2>
+ 666:	57 fd       	sbrc	r21, 7
+ 668:	05 d0       	rcall	.+10     	; 0x674 <__divmodsi4_neg2>
+ 66a:	14 d0       	rcall	.+40     	; 0x694 <__udivmodsi4>
+ 66c:	07 fc       	sbrc	r0, 7
+ 66e:	02 d0       	rcall	.+4      	; 0x674 <__divmodsi4_neg2>
+ 670:	46 f4       	brtc	.+16     	; 0x682 <__divmodsi4_exit>
+ 672:	08 c0       	rjmp	.+16     	; 0x684 <__negsi2>
 
-000007fe <__stop_program>:
- 7fe:	ff cf       	rjmp	.-2      	; 0x7fe <__stop_program>
+00000674 <__divmodsi4_neg2>:
+ 674:	50 95       	com	r21
+ 676:	40 95       	com	r20
+ 678:	30 95       	com	r19
+ 67a:	21 95       	neg	r18
+ 67c:	3f 4f       	sbci	r19, 0xFF	; 255
+ 67e:	4f 4f       	sbci	r20, 0xFF	; 255
+ 680:	5f 4f       	sbci	r21, 0xFF	; 255
+
+00000682 <__divmodsi4_exit>:
+ 682:	08 95       	ret
+
+00000684 <__negsi2>:
+ 684:	90 95       	com	r25
+ 686:	80 95       	com	r24
+ 688:	70 95       	com	r23
+ 68a:	61 95       	neg	r22
+ 68c:	7f 4f       	sbci	r23, 0xFF	; 255
+ 68e:	8f 4f       	sbci	r24, 0xFF	; 255
+ 690:	9f 4f       	sbci	r25, 0xFF	; 255
+ 692:	08 95       	ret
+
+00000694 <__udivmodsi4>:
+ 694:	a1 e2       	ldi	r26, 0x21	; 33
+ 696:	1a 2e       	mov	r1, r26
+ 698:	aa 1b       	sub	r26, r26
+ 69a:	bb 1b       	sub	r27, r27
+ 69c:	fd 01       	movw	r30, r26
+ 69e:	0d c0       	rjmp	.+26     	; 0x6ba <__udivmodsi4_ep>
+
+000006a0 <__udivmodsi4_loop>:
+ 6a0:	aa 1f       	adc	r26, r26
+ 6a2:	bb 1f       	adc	r27, r27
+ 6a4:	ee 1f       	adc	r30, r30
+ 6a6:	ff 1f       	adc	r31, r31
+ 6a8:	a2 17       	cp	r26, r18
+ 6aa:	b3 07       	cpc	r27, r19
+ 6ac:	e4 07       	cpc	r30, r20
+ 6ae:	f5 07       	cpc	r31, r21
+ 6b0:	20 f0       	brcs	.+8      	; 0x6ba <__udivmodsi4_ep>
+ 6b2:	a2 1b       	sub	r26, r18
+ 6b4:	b3 0b       	sbc	r27, r19
+ 6b6:	e4 0b       	sbc	r30, r20
+ 6b8:	f5 0b       	sbc	r31, r21
+
+000006ba <__udivmodsi4_ep>:
+ 6ba:	66 1f       	adc	r22, r22
+ 6bc:	77 1f       	adc	r23, r23
+ 6be:	88 1f       	adc	r24, r24
+ 6c0:	99 1f       	adc	r25, r25
+ 6c2:	1a 94       	dec	r1
+ 6c4:	69 f7       	brne	.-38     	; 0x6a0 <__udivmodsi4_loop>
+ 6c6:	60 95       	com	r22
+ 6c8:	70 95       	com	r23
+ 6ca:	80 95       	com	r24
+ 6cc:	90 95       	com	r25
+ 6ce:	9b 01       	movw	r18, r22
+ 6d0:	ac 01       	movw	r20, r24
+ 6d2:	bd 01       	movw	r22, r26
+ 6d4:	cf 01       	movw	r24, r30
+ 6d6:	08 95       	ret
+
+000006d8 <_exit>:
+ 6d8:	f8 94       	cli
+
+000006da <__stop_program>:
+ 6da:	ff cf       	rjmp	.-2      	; 0x6da <__stop_program>
